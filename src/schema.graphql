@@ -1,0 +1,36 @@
+# import User, Job, Application, Client, AdPlaced, AdSource, Reference, Background, OutreachTarget, OutreachCall, ScreenCall, Article, Expense, Payment from "./generated/prisma.graphql"
+
+type Query {
+  jobs(filter: String): [Job!]!
+  job(id: ID!): Job!
+  users(filter: String): [User!]!
+  user(id: ID!): User!
+  clients(filter: String): [Client!]!
+  client(id: ID!): Client!
+  applications(filter: String): [Application!]!
+  application(id: ID!): Application!
+  ad_sources(filter: String): [AdSource!]!
+  ad_source(id: ID!): AdSource
+  ads_placed(filter: String): [AdPlaced!]!
+  ad_placed(id: ID!): AdPlaced!
+  outreach_targets(filter: String): [OutreachTarget!]!
+  outreach_target(id: ID!): OutreachTarget
+  me: User
+}
+
+type Mutation {
+  create_client(clientName: String!, address: String, city: String, state: String, zip: String, phone: String, email: String): Client!
+  apply(jobId: ID!): Application!
+  post_job(jobTitle: String!, location: String, description: String, address: String, city: String, state: String, zip: String, clientId: ID!): Job!
+  place_ad(jobId: ID!, publicationId: ID!, copy: String, adLink: String, ran: String, cost: Float): AdPlaced
+  add_ad_source(pubName: String!, firstName: String, lastName: String, city: String, state: String, zip: String, phone: String, email: String, instructions: String): AdSource
+  add_outreach_target(firstName: String!, lastName: String!, organization: String!, title: String!, city: String, state: String, zip: String, phone: String, email: String): OutreachTarget!
+  create_background(link: String, type: String, applicantId: ID!): Background
+  signup(email: String!, password: String!, firstName: String!,lastName: String!, type: String): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}

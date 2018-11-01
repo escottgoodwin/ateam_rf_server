@@ -1,0 +1,237 @@
+enum UserType {
+  APPLICANT
+  CONSULTANT
+  CLIENT
+  DIRECTOR
+  RESEARCHER
+  ACCOUNTANT
+}
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType @default(value: "APPLICANT")
+  applications:[Application!]! @relation(name: "ApplicationsByUser")
+  consultant_jobs:[Job!]! @relation(name: "JobsByConsultant")
+  client: Client @relation(name: "ClientByUser")
+  clients_added: [Client!]! @relation(name: "ClientAddUser")
+  jobs_added: [Job!]! @relation(name: "JobAddUser")
+  references: [Reference!]! @relation(name: "ReferenceByUser")
+  applicant_screen_calls: [ScreenCall!]! @relation(name: "ApplicantByScreenCall")
+  background: Background @relation(name: "BackgroundByUser")
+  articles: [Article!]! @relation(name: "ArticleByUser")
+  expenses: [Expense!]! @relation(name: "ExpenseByUser")
+  outreach_target: OutreachTarget @relation(name: "OutreachTargetByUser")
+  ad_sources_added: [AdSource!]! @relation(name: "AdSourceByUser")
+  ads_placed: [AdPlaced!]! @relation(name: "AdPlacedByUser")
+  outreach_targets_added: [OutreachTarget!]! @relation(name: "OutreachTargetByAddUser")
+  outreach_calls: [OutreachCall!]! @relation(name: "OutreachCallerByUser")
+  consultant_screen_calls: [ScreenCall!]! @relation(name: "ScreenCallByUser")
+  reference_calls: [Reference!]! @relation(name: "ReferenceCallerByUser")
+  backgrounds_ordered: [Background!]! @relation(name: "BackgroundOrderedByUser")
+  articles_added: [Article!]! @relation(name: "ArticleAddedByByUser")
+  expenses_paid: [Expense!]! @relation(name: "ExpensePaidByUser")
+}
+
+type Client {
+  id: ID! @unique
+  clientName: String!
+  addedBy: User @relation(name: "ClientAddUser")
+  addedDate: DateTime
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  email: String
+  jobs: [Job!]! @relation(name: "JobsByClient")
+  personnel: [User!]! @relation(name: "ClientByUser")
+}
+
+type Job {
+  id: ID! @unique
+  main_contact: User @relation(name: "MainContactUser")
+  payment_contact: User @relation(name: "PaymentUser")
+  jobTitle: String!
+  addedBy: User @relation(name: "JobAddUser")
+  addedDate: DateTime
+  location: String
+  description: String
+  address: String
+  city: String
+  state: String
+  created: DateTime
+  published: Boolean @default(value: "false")
+  publishedDate: DateTime
+  brochure_sent: DateTime
+  app_deadline: DateTime
+  screening_deadline: DateTime
+  presentation: DateTime
+  background_deadline: DateTime
+  final_interview: DateTime
+  placement_date: DateTime
+  placed: User @relation(name: "PlacedUser")
+  applications: [Application!]! @relation(name: "ApplicationByJob")
+  consultants: [User!]! @relation(name: "JobsByConsultant")
+  client: Client @relation(name: "JobsByClient")
+  ads_placed: [AdPlaced!]! @relation(name: "AdPlacedByJob")
+  outreach_calls: [OutreachCall!]! @relation(name: "OutreachCallByJob")
+  expenses: [Expense!]! @relation(name: "ExpenseByJob")
+  payments: [Payment!]! @relation(name: "PaymentByJob")
+  targets: [OutreachTarget!]!  @relation(name: "OutreachTargetsByJob")
+}
+
+type AdPlaced {
+  id: ID! @unique
+  adSource: AdSource @relation(name: "AdSourceByAdPlaced")
+  job: Job @relation(name: "AdPlacedByJob")
+  placedBy: User @relation(name: "AdPlacedByUser")
+  addedDate: DateTime
+  copy: String
+  adLink: String
+  delivered: DateTime
+  ran: String
+  cost: Float
+  paid: DateTime
+  applications: [Application!]! @relation(name: "AdPlacedByApplication")
+}
+
+type AdSource {
+  id: ID! @unique
+  addedDate: DateTime
+  addedBy: User! @relation(name: "AdSourceByUser")
+  pubName: String!
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  phone: String
+  email: String
+  instructions: String
+  ads: [AdPlaced!]! @relation(name: "AdSourceByAdPlaced")
+}
+
+type OutreachTarget {
+  id: ID! @unique
+  addedBy: User! @relation(name: "OutreachTargetByAddUser")
+  userId: User @relation(name: "OutreachTargetByUser")
+  added: DateTime
+  firstName: String
+  lastName: String
+  organization: String
+  title: String
+  address: String
+  city: String
+  state: String
+  phone: String
+  email: String
+  calls: [OutreachCall!]! @relation(name: "OutreachCallByOutreachTarget")
+  jobs: [Job!]! @relation(name: "OutreachTargetsByJob")
+}
+
+type Application {
+  id: ID! @unique
+  job: Job! @relation(name: "ApplicationByJob")
+  application: User! @relation(name: "ApplicationsByUser")
+  adRef: AdPlaced @relation(name: "AdPlacedByApplication")
+  appDate: DateTime
+  withdrawDate: DateTime
+  withdrawn: Boolean @default(value: "false")
+  selected: Boolean
+  screened: Boolean
+  finalist: Boolean
+  salary: Float
+  references: [Reference!]! @relation(name: "ReferencesByApplication")
+  screen_call: ScreenCall @relation(name: "ApplicationByScreenCall")
+}
+
+type OutreachCall {
+  id: ID! @unique
+  target: OutreachTarget @relation(name: "OutreachCallByOutreachTarget")
+  caller: User @relation(name: "OutreachCallerByUser")
+  job: Job @relation(name: "OutreachCallByJob")
+  lm: DateTime
+  call_date: DateTime
+  notes: String
+  referral: String
+}
+
+type ScreenCall {
+  id: ID! @unique
+  job: Job @relation(name: "ScreenCallByJob")
+  applicant: User @relation(name: "ApplicantByScreenCall")
+  application: Application @relation(name: "ApplicationByScreenCall")
+  caller: User  @relation(name: "ScreenCallByUser")
+  lm: DateTime
+  callDate: DateTime
+  notes: String
+}
+
+type Reference {
+  id: ID! @unique
+  job: Job @relation(name: "ReferenceByJob")
+  applicant: User @relation(name: "ReferenceByUser")
+  application: Application @relation(name: "ReferencesByApplication")
+  caller: User @relation(name: "ReferenceCallerByUser")
+  callDate: DateTime
+  notes: String
+  lm: DateTime
+  firstName: String
+  lastName: String
+  title: String
+  relation: String
+  email: String
+  phone: String
+}
+
+type Background {
+  id: ID! @unique
+  orderedBy: User @relation(name: "BackgroundOrderedByUser")
+  applicant: User @relation(name: "BackgroundByUser")
+  backgroundDate: DateTime
+  type: String
+  link: String
+}
+
+type Article {
+  id: ID! @unique
+  addedBy: User @relation(name: "ArticleAddedByByUser")
+  applicant: User @relation(name: "ArticleByUser")
+  articleDate: DateTime
+  title: String
+  summary: String
+  link: String
+}
+
+type Expense {
+  id: ID! @unique
+  job: Job @relation(name: "ExpenseByJob")
+  consultant: User @relation(name: "ExpenseByUser")
+  expenseDate: DateTime
+  expensePaidBy: User @relation(name: "ExpensePaidByUser")
+  expensePaidDate: DateTime
+  type: String
+  amount: Float
+  link: String
+}
+
+type Payment {
+  id: ID! @unique
+  job: Job @relation(name: "PaymentByJob")
+  paidBy: User @relation(name: "PaidByJob")
+  billDate: DateTime
+  paidDate: DateTime
+  phase: String
+  amount: Float
+}
