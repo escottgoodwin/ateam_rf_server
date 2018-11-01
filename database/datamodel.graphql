@@ -190,6 +190,7 @@ type Reference {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String

@@ -1,5 +1,5 @@
 # source: https://rfql.herokuapp.com/rfql/dev
-# timestamp: Thu Nov 01 2018 14:37:16 GMT-0700 (Pacific Daylight Time)
+# timestamp: Thu Nov 01 2018 16:26:12 GMT-0700 (Pacific Daylight Time)
 
 type AdPlaced implements Node {
   id: ID!
@@ -3714,6 +3714,8 @@ type Job implements Node {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3751,6 +3753,8 @@ input JobCreateInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3831,6 +3835,8 @@ input JobCreateWithoutAddedByInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3860,6 +3866,8 @@ input JobCreateWithoutAds_placedInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3889,6 +3897,8 @@ input JobCreateWithoutApplicationsInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3918,6 +3928,8 @@ input JobCreateWithoutClientInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3947,6 +3959,8 @@ input JobCreateWithoutConsultantsInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -3976,6 +3990,8 @@ input JobCreateWithoutExpensesInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4005,6 +4021,8 @@ input JobCreateWithoutOutreach_callsInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4034,6 +4052,8 @@ input JobCreateWithoutPaymentsInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4063,6 +4083,8 @@ input JobCreateWithoutTargetsInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4111,6 +4133,10 @@ enum JobOrderByInput {
   state_DESC
   created_ASC
   created_DESC
+  published_ASC
+  published_DESC
+  publishedDate_ASC
+  publishedDate_DESC
   brochure_sent_ASC
   brochure_sent_DESC
   app_deadline_ASC
@@ -4141,6 +4167,8 @@ type JobPreviousValues {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4198,6 +4226,8 @@ input JobUpdateDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4228,6 +4258,8 @@ input JobUpdateInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4347,6 +4379,8 @@ input JobUpdateWithoutAddedByDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4376,6 +4410,8 @@ input JobUpdateWithoutAds_placedDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4405,6 +4441,8 @@ input JobUpdateWithoutApplicationsDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4434,6 +4472,8 @@ input JobUpdateWithoutClientDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4463,6 +4503,8 @@ input JobUpdateWithoutConsultantsDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4492,6 +4534,8 @@ input JobUpdateWithoutExpensesDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4521,6 +4565,8 @@ input JobUpdateWithoutOutreach_callsDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4550,6 +4596,8 @@ input JobUpdateWithoutPaymentsDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -4579,6 +4627,8 @@ input JobUpdateWithoutTargetsDataInput {
   city: String
   state: String
   created: DateTime
+  published: Boolean
+  publishedDate: DateTime
   brochure_sent: DateTime
   app_deadline: DateTime
   screening_deadline: DateTime
@@ -5006,6 +5056,32 @@ input JobWhereInput {
 
   """All values greater than or equal the given value."""
   created_gte: DateTime
+  published: Boolean
+
+  """All values that are not equal to given value."""
+  published_not: Boolean
+  publishedDate: DateTime
+
+  """All values that are not equal to given value."""
+  publishedDate_not: DateTime
+
+  """All values that are contained in given list."""
+  publishedDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  publishedDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  publishedDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  publishedDate_lte: DateTime
+
+  """All values greater than the given value."""
+  publishedDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  publishedDate_gte: DateTime
   brochure_sent: DateTime
 
   """All values that are not equal to given value."""
@@ -6935,6 +7011,7 @@ type Reference implements Node {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -6957,6 +7034,7 @@ input ReferenceCreateInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -6988,6 +7066,7 @@ input ReferenceCreateWithoutApplicantInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7003,6 +7082,7 @@ input ReferenceCreateWithoutApplicationInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7018,6 +7098,7 @@ input ReferenceCreateWithoutCallerInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7050,6 +7131,8 @@ enum ReferenceOrderByInput {
   lastName_DESC
   title_ASC
   title_DESC
+  organization_ASC
+  organization_DESC
   relation_ASC
   relation_DESC
   email_ASC
@@ -7070,6 +7153,7 @@ type ReferencePreviousValues {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7121,6 +7205,7 @@ input ReferenceUpdateInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7164,6 +7249,7 @@ input ReferenceUpdateWithoutApplicantDataInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7179,6 +7265,7 @@ input ReferenceUpdateWithoutApplicationDataInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7194,6 +7281,7 @@ input ReferenceUpdateWithoutCallerDataInput {
   firstName: String
   lastName: String
   title: String
+  organization: String
   relation: String
   email: String
   phone: String
@@ -7488,6 +7576,46 @@ input ReferenceWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  organization: String
+
+  """All values that are not equal to given value."""
+  organization_not: String
+
+  """All values that are contained in given list."""
+  organization_in: [String!]
+
+  """All values that are not contained in given list."""
+  organization_not_in: [String!]
+
+  """All values less than the given value."""
+  organization_lt: String
+
+  """All values less than or equal the given value."""
+  organization_lte: String
+
+  """All values greater than the given value."""
+  organization_gt: String
+
+  """All values greater than or equal the given value."""
+  organization_gte: String
+
+  """All values containing the given string."""
+  organization_contains: String
+
+  """All values not containing the given string."""
+  organization_not_contains: String
+
+  """All values starting with the given string."""
+  organization_starts_with: String
+
+  """All values not starting with the given string."""
+  organization_not_starts_with: String
+
+  """All values ending with the given string."""
+  organization_ends_with: String
+
+  """All values not ending with the given string."""
+  organization_not_ends_with: String
   relation: String
 
   """All values that are not equal to given value."""

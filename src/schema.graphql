@@ -18,14 +18,23 @@ type Query {
   me: User
 }
 
+post_job,
+
+add_outreach_call,
+add_screen_call,
+add_reference,
+
 type Mutation {
   create_client(clientName: String!, address: String, city: String, state: String, zip: String, phone: String, email: String): Client!
   apply(jobId: ID!): Application!
   post_job(jobTitle: String!, location: String, description: String, address: String, city: String, state: String, zip: String, clientId: ID!): Job!
-  place_ad(jobId: ID!, publicationId: ID!, copy: String, adLink: String, ran: String, cost: Float): AdPlaced
-  add_ad_source(pubName: String!, firstName: String, lastName: String, city: String, state: String, zip: String, phone: String, email: String, instructions: String): AdSource
+  place_ad(jobId: ID!, publicationId: ID!, copy: String, adLink: String, ran: String, cost: Float): AdPlaced!
+  add_ad_source(pubName: String!, firstName: String, lastName: String, city: String, state: String, zip: String, phone: String, email: String, instructions: String): AdSource!
   add_outreach_target(firstName: String!, lastName: String!, organization: String!, title: String!, city: String, state: String, zip: String, phone: String, email: String): OutreachTarget!
-  create_background(link: String, type: String, applicantId: ID!): Background
+  add_background(link: String, type: String, applicantId: ID!, jobId: ID!): Background!
+  add_outreach_call(lm: DateTime, notes: String, call_date: DateTime, referral: String, targetId: ID!, jobId: ID!): OutreachCall!
+  add_screen_call(lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
+  add_reference(firstName: String!, lastName: String!, organization: String!, title: String!,phone: String, email: String, relation: String, lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
   signup(email: String!, password: String!, firstName: String!,lastName: String!, type: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
 }

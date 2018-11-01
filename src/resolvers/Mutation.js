@@ -76,7 +76,7 @@ function create_client(parent, { clientName, address, city, state, zip, phone, e
   )
 }
 
-function create_background(parent, { link, type, userId }, ctx, info) {
+function add_background(parent, { link, type, userId }, ctx, info) {
 
   const addedDate = new Date()
   return ctx.db.mutation.createBackground(
@@ -194,7 +194,7 @@ function apply(parent, { jobId }, ctx, info) {
 function add_outreach_call(parent, { jobId, targetId, lm, callDate, notes, referral }, ctx, info) {
   const userId = getUserId(ctx)
   const appDate = new Date()
-  return ctx.db.mutation.createApplication(
+  return ctx.db.mutation.createOutreachCall(
     {
       data: {
         lm
@@ -219,7 +219,7 @@ function add_outreach_call(parent, { jobId, targetId, lm, callDate, notes, refer
 function add_screen_call(parent, { jobId, applicantId, applicationId, lm, callDate, notes, referral }, ctx, info) {
   const userId = getUserId(ctx)
   const appDate = new Date()
-  return ctx.db.mutation.createApplication(
+  return ctx.db.mutation.createScreenCall(
     {
       data: {
         lm,
@@ -247,7 +247,7 @@ function add_screen_call(parent, { jobId, applicantId, applicationId, lm, callDa
 function add_reference(parent, { jobId, applicantId, applicationId, lm, callDate, notes, firstName, lastName, organization, title, relation, phone, email }, ctx, info) {
   const userId = getUserId(ctx)
   const appDate = new Date()
-  return ctx.db.mutation.createApplication(
+  return ctx.db.mutation.createReference(
     {
       data: {
         lm,
@@ -310,35 +310,17 @@ async function login(parent, args, ctx, info) {
   }
 }
 
-async function vote(parent, args, ctx, info) {
-  const { linkId } = args
-  const userId = getUserId(ctx)
-  const linkExists = await ctx.db.exists.Vote({
-    user: { id: userId },
-    link: { id: linkId },
-  })
-  if (linkExists) {
-    throw new Error(`Already voted for link: ${linkId}`)
-  }
-
-  return ctx.db.mutation.createVote(
-    {
-      data: {
-        user: { connect: { id: userId } },
-        link: { connect: { id: linkId } },
-      },
-    },
-    info,
-  )
-}
-
 module.exports = {
   post_job,
   create_client,
   apply,
+  add_background,
   add_outreach_target,
   add_ad_source,
   place_ad,
+  add_outreach_call,
+  add_screen_call,
+  add_reference,
   signup,
   login,
 }
