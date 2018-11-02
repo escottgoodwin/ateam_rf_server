@@ -1,0 +1,19 @@
+setup:
+  addons:
+    - plan: 'heroku-postgresql:hobby-dev'
+      as: DATABASE
+  config:
+    CONFIG: |-
+      port: $PORT
+      managementApiSecret: 0b9a56de6f0d46c7aa9dfa0f7ad2b774f41b9962
+      databases:
+        default:
+          connector: postgres
+          migrations: true
+          connectionLimit: 2
+          uri: ${DATABASE_URL}?ssl=1
+            
+    JAVA_OPTS: '-Xmx358m'
+    PRISMA_CONFIG_PATH: /app/config.yml
+build:
+  languages: []
