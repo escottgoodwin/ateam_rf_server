@@ -30,7 +30,6 @@ type User {
   applicant_screen_calls: [ScreenCall!]! @relation(name: "ApplicantByScreenCall")
   background: Background @relation(name: "BackgroundByUser")
   articles: [Article!]! @relation(name: "ArticleByUser")
-  expenses: [Expense!]! @relation(name: "ExpenseByUser")
   outreach_target: OutreachTarget @relation(name: "OutreachTargetByUser")
   ad_sources_added: [AdSource!]! @relation(name: "AdSourceByUser")
   ads_placed: [AdPlaced!]! @relation(name: "AdPlacedByUser")
@@ -40,7 +39,10 @@ type User {
   reference_calls: [Reference!]! @relation(name: "ReferenceCallerByUser")
   backgrounds_ordered: [Background!]! @relation(name: "BackgroundOrderedByUser")
   articles_added: [Article!]! @relation(name: "ArticleAddedByByUser")
+  expenses_added: [Expense!]! @relation(name: "ExpenseByUser")
   expenses_paid: [Expense!]! @relation(name: "ExpensePaidByUser")
+  payments_added: [Payment!]! @relation(name: "AddedByPayment")
+  payments_paid: [Payment!]! @relation(name: "PaymentPaidByUser")
 }
 
 type Client {
@@ -232,7 +234,8 @@ type Expense {
 type Payment {
   id: ID! @unique
   job: Job @relation(name: "PaymentByJob")
-  paidBy: User @relation(name: "PaidByJob")
+  paidBy: User @relation(name: "PaymentPaidByUser")
+  addedBy: User @relation(name: "AddedByPayment")
   billDate: DateTime
   paidDate: DateTime
   phase: String

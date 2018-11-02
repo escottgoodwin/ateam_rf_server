@@ -1,5 +1,5 @@
 # source: https://rfql.herokuapp.com/rfql/dev
-# timestamp: Thu Nov 01 2018 16:26:12 GMT-0700 (Pacific Daylight Time)
+# timestamp: Thu Nov 01 2018 20:50:06 GMT-0700 (Pacific Daylight Time)
 
 type AdPlaced implements Node {
   id: ID!
@@ -1886,6 +1886,7 @@ type Article implements Node {
   id: ID!
   addedBy(where: UserWhereInput): User
   applicant(where: UserWhereInput): User
+  job(where: JobWhereInput): Job
   articleDate: DateTime
   title: String
   summary: String
@@ -1909,6 +1910,7 @@ input ArticleCreateInput {
   link: String
   addedBy: UserCreateOneWithoutArticles_addedInput
   applicant: UserCreateOneWithoutArticlesInput
+  job: JobCreateOneWithoutArticlesInput
 }
 
 input ArticleCreateManyWithoutAddedByInput {
@@ -1921,12 +1923,18 @@ input ArticleCreateManyWithoutApplicantInput {
   connect: [ArticleWhereUniqueInput!]
 }
 
+input ArticleCreateManyWithoutJobInput {
+  create: [ArticleCreateWithoutJobInput!]
+  connect: [ArticleWhereUniqueInput!]
+}
+
 input ArticleCreateWithoutAddedByInput {
   articleDate: DateTime
   title: String
   summary: String
   link: String
   applicant: UserCreateOneWithoutArticlesInput
+  job: JobCreateOneWithoutArticlesInput
 }
 
 input ArticleCreateWithoutApplicantInput {
@@ -1935,6 +1943,16 @@ input ArticleCreateWithoutApplicantInput {
   summary: String
   link: String
   addedBy: UserCreateOneWithoutArticles_addedInput
+  job: JobCreateOneWithoutArticlesInput
+}
+
+input ArticleCreateWithoutJobInput {
+  articleDate: DateTime
+  title: String
+  summary: String
+  link: String
+  addedBy: UserCreateOneWithoutArticles_addedInput
+  applicant: UserCreateOneWithoutArticlesInput
 }
 
 """An edge in a connection."""
@@ -2017,6 +2035,7 @@ input ArticleUpdateInput {
   link: String
   addedBy: UserUpdateOneWithoutArticles_addedInput
   applicant: UserUpdateOneWithoutArticlesInput
+  job: JobUpdateOneWithoutArticlesInput
 }
 
 input ArticleUpdateManyWithoutAddedByInput {
@@ -2037,12 +2056,22 @@ input ArticleUpdateManyWithoutApplicantInput {
   upsert: [ArticleUpsertWithWhereUniqueWithoutApplicantInput!]
 }
 
+input ArticleUpdateManyWithoutJobInput {
+  create: [ArticleCreateWithoutJobInput!]
+  connect: [ArticleWhereUniqueInput!]
+  disconnect: [ArticleWhereUniqueInput!]
+  delete: [ArticleWhereUniqueInput!]
+  update: [ArticleUpdateWithWhereUniqueWithoutJobInput!]
+  upsert: [ArticleUpsertWithWhereUniqueWithoutJobInput!]
+}
+
 input ArticleUpdateWithoutAddedByDataInput {
   articleDate: DateTime
   title: String
   summary: String
   link: String
   applicant: UserUpdateOneWithoutArticlesInput
+  job: JobUpdateOneWithoutArticlesInput
 }
 
 input ArticleUpdateWithoutApplicantDataInput {
@@ -2051,6 +2080,16 @@ input ArticleUpdateWithoutApplicantDataInput {
   summary: String
   link: String
   addedBy: UserUpdateOneWithoutArticles_addedInput
+  job: JobUpdateOneWithoutArticlesInput
+}
+
+input ArticleUpdateWithoutJobDataInput {
+  articleDate: DateTime
+  title: String
+  summary: String
+  link: String
+  addedBy: UserUpdateOneWithoutArticles_addedInput
+  applicant: UserUpdateOneWithoutArticlesInput
 }
 
 input ArticleUpdateWithWhereUniqueWithoutAddedByInput {
@@ -2063,6 +2102,11 @@ input ArticleUpdateWithWhereUniqueWithoutApplicantInput {
   data: ArticleUpdateWithoutApplicantDataInput!
 }
 
+input ArticleUpdateWithWhereUniqueWithoutJobInput {
+  where: ArticleWhereUniqueInput!
+  data: ArticleUpdateWithoutJobDataInput!
+}
+
 input ArticleUpsertWithWhereUniqueWithoutAddedByInput {
   where: ArticleWhereUniqueInput!
   update: ArticleUpdateWithoutAddedByDataInput!
@@ -2073,6 +2117,12 @@ input ArticleUpsertWithWhereUniqueWithoutApplicantInput {
   where: ArticleWhereUniqueInput!
   update: ArticleUpdateWithoutApplicantDataInput!
   create: ArticleCreateWithoutApplicantInput!
+}
+
+input ArticleUpsertWithWhereUniqueWithoutJobInput {
+  where: ArticleWhereUniqueInput!
+  update: ArticleUpdateWithoutJobDataInput!
+  create: ArticleCreateWithoutJobInput!
 }
 
 input ArticleWhereInput {
@@ -2268,6 +2318,7 @@ input ArticleWhereInput {
   link_not_ends_with: String
   addedBy: UserWhereInput
   applicant: UserWhereInput
+  job: JobWhereInput
 }
 
 input ArticleWhereUniqueInput {
@@ -3271,7 +3322,7 @@ input ExpenseCreateInput {
   amount: Float
   link: String
   job: JobCreateOneWithoutExpensesInput
-  consultant: UserCreateOneWithoutExpensesInput
+  consultant: UserCreateOneWithoutExpenses_addedInput
   expensePaidBy: UserCreateOneWithoutExpenses_paidInput
 }
 
@@ -3307,7 +3358,7 @@ input ExpenseCreateWithoutExpensePaidByInput {
   amount: Float
   link: String
   job: JobCreateOneWithoutExpensesInput
-  consultant: UserCreateOneWithoutExpensesInput
+  consultant: UserCreateOneWithoutExpenses_addedInput
 }
 
 input ExpenseCreateWithoutJobInput {
@@ -3316,7 +3367,7 @@ input ExpenseCreateWithoutJobInput {
   type: String
   amount: Float
   link: String
-  consultant: UserCreateOneWithoutExpensesInput
+  consultant: UserCreateOneWithoutExpenses_addedInput
   expensePaidBy: UserCreateOneWithoutExpenses_paidInput
 }
 
@@ -3403,7 +3454,7 @@ input ExpenseUpdateInput {
   amount: Float
   link: String
   job: JobUpdateOneWithoutExpensesInput
-  consultant: UserUpdateOneWithoutExpensesInput
+  consultant: UserUpdateOneWithoutExpenses_addedInput
   expensePaidBy: UserUpdateOneWithoutExpenses_paidInput
 }
 
@@ -3451,7 +3502,7 @@ input ExpenseUpdateWithoutExpensePaidByDataInput {
   amount: Float
   link: String
   job: JobUpdateOneWithoutExpensesInput
-  consultant: UserUpdateOneWithoutExpensesInput
+  consultant: UserUpdateOneWithoutExpenses_addedInput
 }
 
 input ExpenseUpdateWithoutJobDataInput {
@@ -3460,7 +3511,7 @@ input ExpenseUpdateWithoutJobDataInput {
   type: String
   amount: Float
   link: String
-  consultant: UserUpdateOneWithoutExpensesInput
+  consultant: UserUpdateOneWithoutExpenses_addedInput
   expensePaidBy: UserUpdateOneWithoutExpenses_paidInput
 }
 
@@ -3732,6 +3783,7 @@ type Job implements Node {
   expenses(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
   payments(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
   targets(where: OutreachTargetWhereInput, orderBy: OutreachTargetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OutreachTarget!]
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
 }
 
 """A connection to a list of items."""
@@ -3774,6 +3826,7 @@ input JobCreateInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateManyWithoutAddedByInput {
@@ -3808,6 +3861,11 @@ input JobCreateOneWithoutAds_placedInput {
 
 input JobCreateOneWithoutApplicationsInput {
   create: JobCreateWithoutApplicationsInput
+  connect: JobWhereUniqueInput
+}
+
+input JobCreateOneWithoutArticlesInput {
+  create: JobCreateWithoutArticlesInput
   connect: JobWhereUniqueInput
 }
 
@@ -3855,6 +3913,7 @@ input JobCreateWithoutAddedByInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutAds_placedInput {
@@ -3886,6 +3945,7 @@ input JobCreateWithoutAds_placedInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutApplicationsInput {
@@ -3910,6 +3970,39 @@ input JobCreateWithoutApplicationsInput {
   payment_contact: UserCreateOneInput
   addedBy: UserCreateOneWithoutJobs_addedInput
   placed: UserCreateOneInput
+  consultants: UserCreateManyWithoutConsultant_jobsInput
+  client: ClientCreateOneWithoutJobsInput
+  ads_placed: AdPlacedCreateManyWithoutJobInput
+  outreach_calls: OutreachCallCreateManyWithoutJobInput
+  expenses: ExpenseCreateManyWithoutJobInput
+  payments: PaymentCreateManyWithoutJobInput
+  targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
+}
+
+input JobCreateWithoutArticlesInput {
+  jobTitle: String!
+  addedDate: DateTime
+  location: String
+  description: String
+  address: String
+  city: String
+  state: String
+  created: DateTime
+  published: Boolean
+  publishedDate: DateTime
+  brochure_sent: DateTime
+  app_deadline: DateTime
+  screening_deadline: DateTime
+  presentation: DateTime
+  background_deadline: DateTime
+  final_interview: DateTime
+  placement_date: DateTime
+  main_contact: UserCreateOneInput
+  payment_contact: UserCreateOneInput
+  addedBy: UserCreateOneWithoutJobs_addedInput
+  placed: UserCreateOneInput
+  applications: ApplicationCreateManyWithoutJobInput
   consultants: UserCreateManyWithoutConsultant_jobsInput
   client: ClientCreateOneWithoutJobsInput
   ads_placed: AdPlacedCreateManyWithoutJobInput
@@ -3948,6 +4041,7 @@ input JobCreateWithoutClientInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutConsultantsInput {
@@ -3979,6 +4073,7 @@ input JobCreateWithoutConsultantsInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutExpensesInput {
@@ -4010,6 +4105,7 @@ input JobCreateWithoutExpensesInput {
   outreach_calls: OutreachCallCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutOutreach_callsInput {
@@ -4041,6 +4137,7 @@ input JobCreateWithoutOutreach_callsInput {
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutPaymentsInput {
@@ -4072,6 +4169,7 @@ input JobCreateWithoutPaymentsInput {
   outreach_calls: OutreachCallCreateManyWithoutJobInput
   expenses: ExpenseCreateManyWithoutJobInput
   targets: OutreachTargetCreateManyWithoutJobsInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutTargetsInput {
@@ -4103,6 +4201,7 @@ input JobCreateWithoutTargetsInput {
   outreach_calls: OutreachCallCreateManyWithoutJobInput
   expenses: ExpenseCreateManyWithoutJobInput
   payments: PaymentCreateManyWithoutJobInput
+  articles: ArticleCreateManyWithoutJobInput
 }
 
 """An edge in a connection."""
@@ -4247,6 +4346,7 @@ input JobUpdateDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateInput {
@@ -4279,6 +4379,7 @@ input JobUpdateInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateManyWithoutAddedByInput {
@@ -4343,6 +4444,15 @@ input JobUpdateOneWithoutApplicationsInput {
   upsert: JobUpsertWithoutApplicationsInput
 }
 
+input JobUpdateOneWithoutArticlesInput {
+  create: JobCreateWithoutArticlesInput
+  connect: JobWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: JobUpdateWithoutArticlesDataInput
+  upsert: JobUpsertWithoutArticlesInput
+}
+
 input JobUpdateOneWithoutExpensesInput {
   create: JobCreateWithoutExpensesInput
   connect: JobWhereUniqueInput
@@ -4399,6 +4509,7 @@ input JobUpdateWithoutAddedByDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutAds_placedDataInput {
@@ -4430,6 +4541,7 @@ input JobUpdateWithoutAds_placedDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutApplicationsDataInput {
@@ -4454,6 +4566,39 @@ input JobUpdateWithoutApplicationsDataInput {
   payment_contact: UserUpdateOneInput
   addedBy: UserUpdateOneWithoutJobs_addedInput
   placed: UserUpdateOneInput
+  consultants: UserUpdateManyWithoutConsultant_jobsInput
+  client: ClientUpdateOneWithoutJobsInput
+  ads_placed: AdPlacedUpdateManyWithoutJobInput
+  outreach_calls: OutreachCallUpdateManyWithoutJobInput
+  expenses: ExpenseUpdateManyWithoutJobInput
+  payments: PaymentUpdateManyWithoutJobInput
+  targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
+}
+
+input JobUpdateWithoutArticlesDataInput {
+  jobTitle: String
+  addedDate: DateTime
+  location: String
+  description: String
+  address: String
+  city: String
+  state: String
+  created: DateTime
+  published: Boolean
+  publishedDate: DateTime
+  brochure_sent: DateTime
+  app_deadline: DateTime
+  screening_deadline: DateTime
+  presentation: DateTime
+  background_deadline: DateTime
+  final_interview: DateTime
+  placement_date: DateTime
+  main_contact: UserUpdateOneInput
+  payment_contact: UserUpdateOneInput
+  addedBy: UserUpdateOneWithoutJobs_addedInput
+  placed: UserUpdateOneInput
+  applications: ApplicationUpdateManyWithoutJobInput
   consultants: UserUpdateManyWithoutConsultant_jobsInput
   client: ClientUpdateOneWithoutJobsInput
   ads_placed: AdPlacedUpdateManyWithoutJobInput
@@ -4492,6 +4637,7 @@ input JobUpdateWithoutClientDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutConsultantsDataInput {
@@ -4523,6 +4669,7 @@ input JobUpdateWithoutConsultantsDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutExpensesDataInput {
@@ -4554,6 +4701,7 @@ input JobUpdateWithoutExpensesDataInput {
   outreach_calls: OutreachCallUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutOutreach_callsDataInput {
@@ -4585,6 +4733,7 @@ input JobUpdateWithoutOutreach_callsDataInput {
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutPaymentsDataInput {
@@ -4616,6 +4765,7 @@ input JobUpdateWithoutPaymentsDataInput {
   outreach_calls: OutreachCallUpdateManyWithoutJobInput
   expenses: ExpenseUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutTargetsDataInput {
@@ -4647,6 +4797,7 @@ input JobUpdateWithoutTargetsDataInput {
   outreach_calls: OutreachCallUpdateManyWithoutJobInput
   expenses: ExpenseUpdateManyWithoutJobInput
   payments: PaymentUpdateManyWithoutJobInput
+  articles: ArticleUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithWhereUniqueWithoutAddedByInput {
@@ -4682,6 +4833,11 @@ input JobUpsertWithoutAds_placedInput {
 input JobUpsertWithoutApplicationsInput {
   update: JobUpdateWithoutApplicationsDataInput!
   create: JobCreateWithoutApplicationsInput!
+}
+
+input JobUpsertWithoutArticlesInput {
+  update: JobUpdateWithoutArticlesDataInput!
+  create: JobCreateWithoutArticlesInput!
 }
 
 input JobUpsertWithoutExpensesInput {
@@ -5262,6 +5418,9 @@ input JobWhereInput {
   targets_every: OutreachTargetWhereInput
   targets_some: OutreachTargetWhereInput
   targets_none: OutreachTargetWhereInput
+  articles_every: ArticleWhereInput
+  articles_some: ArticleWhereInput
+  articles_none: ArticleWhereInput
   _MagicalBackRelation_ReferenceByJob_every: ReferenceWhereInput
   _MagicalBackRelation_ReferenceByJob_some: ReferenceWhereInput
   _MagicalBackRelation_ReferenceByJob_none: ReferenceWhereInput
@@ -6637,6 +6796,7 @@ type Payment implements Node {
   id: ID!
   job(where: JobWhereInput): Job
   paidBy(where: UserWhereInput): User
+  addedBy(where: UserWhereInput): User
   billDate: DateTime
   paidDate: DateTime
   phase: String
@@ -6659,7 +6819,13 @@ input PaymentCreateInput {
   phase: String
   amount: Float
   job: JobCreateOneWithoutPaymentsInput
-  paidBy: UserCreateOneInput
+  paidBy: UserCreateOneWithoutPayments_paidInput
+  addedBy: UserCreateOneWithoutPayments_addedInput
+}
+
+input PaymentCreateManyWithoutAddedByInput {
+  create: [PaymentCreateWithoutAddedByInput!]
+  connect: [PaymentWhereUniqueInput!]
 }
 
 input PaymentCreateManyWithoutJobInput {
@@ -6667,12 +6833,36 @@ input PaymentCreateManyWithoutJobInput {
   connect: [PaymentWhereUniqueInput!]
 }
 
+input PaymentCreateManyWithoutPaidByInput {
+  create: [PaymentCreateWithoutPaidByInput!]
+  connect: [PaymentWhereUniqueInput!]
+}
+
+input PaymentCreateWithoutAddedByInput {
+  billDate: DateTime
+  paidDate: DateTime
+  phase: String
+  amount: Float
+  job: JobCreateOneWithoutPaymentsInput
+  paidBy: UserCreateOneWithoutPayments_paidInput
+}
+
 input PaymentCreateWithoutJobInput {
   billDate: DateTime
   paidDate: DateTime
   phase: String
   amount: Float
-  paidBy: UserCreateOneInput
+  paidBy: UserCreateOneWithoutPayments_paidInput
+  addedBy: UserCreateOneWithoutPayments_addedInput
+}
+
+input PaymentCreateWithoutPaidByInput {
+  billDate: DateTime
+  paidDate: DateTime
+  phase: String
+  amount: Float
+  job: JobCreateOneWithoutPaymentsInput
+  addedBy: UserCreateOneWithoutPayments_addedInput
 }
 
 """An edge in a connection."""
@@ -6754,7 +6944,17 @@ input PaymentUpdateInput {
   phase: String
   amount: Float
   job: JobUpdateOneWithoutPaymentsInput
-  paidBy: UserUpdateOneInput
+  paidBy: UserUpdateOneWithoutPayments_paidInput
+  addedBy: UserUpdateOneWithoutPayments_addedInput
+}
+
+input PaymentUpdateManyWithoutAddedByInput {
+  create: [PaymentCreateWithoutAddedByInput!]
+  connect: [PaymentWhereUniqueInput!]
+  disconnect: [PaymentWhereUniqueInput!]
+  delete: [PaymentWhereUniqueInput!]
+  update: [PaymentUpdateWithWhereUniqueWithoutAddedByInput!]
+  upsert: [PaymentUpsertWithWhereUniqueWithoutAddedByInput!]
 }
 
 input PaymentUpdateManyWithoutJobInput {
@@ -6766,12 +6966,45 @@ input PaymentUpdateManyWithoutJobInput {
   upsert: [PaymentUpsertWithWhereUniqueWithoutJobInput!]
 }
 
+input PaymentUpdateManyWithoutPaidByInput {
+  create: [PaymentCreateWithoutPaidByInput!]
+  connect: [PaymentWhereUniqueInput!]
+  disconnect: [PaymentWhereUniqueInput!]
+  delete: [PaymentWhereUniqueInput!]
+  update: [PaymentUpdateWithWhereUniqueWithoutPaidByInput!]
+  upsert: [PaymentUpsertWithWhereUniqueWithoutPaidByInput!]
+}
+
+input PaymentUpdateWithoutAddedByDataInput {
+  billDate: DateTime
+  paidDate: DateTime
+  phase: String
+  amount: Float
+  job: JobUpdateOneWithoutPaymentsInput
+  paidBy: UserUpdateOneWithoutPayments_paidInput
+}
+
 input PaymentUpdateWithoutJobDataInput {
   billDate: DateTime
   paidDate: DateTime
   phase: String
   amount: Float
-  paidBy: UserUpdateOneInput
+  paidBy: UserUpdateOneWithoutPayments_paidInput
+  addedBy: UserUpdateOneWithoutPayments_addedInput
+}
+
+input PaymentUpdateWithoutPaidByDataInput {
+  billDate: DateTime
+  paidDate: DateTime
+  phase: String
+  amount: Float
+  job: JobUpdateOneWithoutPaymentsInput
+  addedBy: UserUpdateOneWithoutPayments_addedInput
+}
+
+input PaymentUpdateWithWhereUniqueWithoutAddedByInput {
+  where: PaymentWhereUniqueInput!
+  data: PaymentUpdateWithoutAddedByDataInput!
 }
 
 input PaymentUpdateWithWhereUniqueWithoutJobInput {
@@ -6779,10 +7012,27 @@ input PaymentUpdateWithWhereUniqueWithoutJobInput {
   data: PaymentUpdateWithoutJobDataInput!
 }
 
+input PaymentUpdateWithWhereUniqueWithoutPaidByInput {
+  where: PaymentWhereUniqueInput!
+  data: PaymentUpdateWithoutPaidByDataInput!
+}
+
+input PaymentUpsertWithWhereUniqueWithoutAddedByInput {
+  where: PaymentWhereUniqueInput!
+  update: PaymentUpdateWithoutAddedByDataInput!
+  create: PaymentCreateWithoutAddedByInput!
+}
+
 input PaymentUpsertWithWhereUniqueWithoutJobInput {
   where: PaymentWhereUniqueInput!
   update: PaymentUpdateWithoutJobDataInput!
   create: PaymentCreateWithoutJobInput!
+}
+
+input PaymentUpsertWithWhereUniqueWithoutPaidByInput {
+  where: PaymentWhereUniqueInput!
+  update: PaymentUpdateWithoutPaidByDataInput!
+  create: PaymentCreateWithoutPaidByInput!
 }
 
 input PaymentWhereInput {
@@ -6942,6 +7192,7 @@ input PaymentWhereInput {
   amount_gte: Float
   job: JobWhereInput
   paidBy: UserWhereInput
+  addedBy: UserWhereInput
 }
 
 input PaymentWhereUniqueInput {
@@ -8163,7 +8414,6 @@ type User implements Node {
   applicant_screen_calls(where: ScreenCallWhereInput, orderBy: ScreenCallOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ScreenCall!]
   background(where: BackgroundWhereInput): Background
   articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
-  expenses(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
   outreach_target(where: OutreachTargetWhereInput): OutreachTarget
   ad_sources_added(where: AdSourceWhereInput, orderBy: AdSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AdSource!]
   ads_placed(where: AdPlacedWhereInput, orderBy: AdPlacedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AdPlaced!]
@@ -8173,7 +8423,10 @@ type User implements Node {
   reference_calls(where: ReferenceWhereInput, orderBy: ReferenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reference!]
   backgrounds_ordered(where: BackgroundWhereInput, orderBy: BackgroundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Background!]
   articles_added(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  expenses_added(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
   expenses_paid(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
+  payments_added(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
+  payments_paid(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
 }
 
 """A connection to a list of items."""
@@ -8208,7 +8461,6 @@ input UserCreateInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8218,7 +8470,10 @@ input UserCreateInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateManyWithoutClientInput {
@@ -8286,13 +8541,13 @@ input UserCreateOneWithoutConsultant_screen_callsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutExpenses_paidInput {
-  create: UserCreateWithoutExpenses_paidInput
+input UserCreateOneWithoutExpenses_addedInput {
+  create: UserCreateWithoutExpenses_addedInput
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutExpensesInput {
-  create: UserCreateWithoutExpensesInput
+input UserCreateOneWithoutExpenses_paidInput {
+  create: UserCreateWithoutExpenses_paidInput
   connect: UserWhereUniqueInput
 }
 
@@ -8313,6 +8568,16 @@ input UserCreateOneWithoutOutreach_targetInput {
 
 input UserCreateOneWithoutOutreach_targets_addedInput {
   create: UserCreateWithoutOutreach_targets_addedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutPayments_addedInput {
+  create: UserCreateWithoutPayments_addedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutPayments_paidInput {
+  create: UserCreateWithoutPayments_paidInput
   connect: UserWhereUniqueInput
 }
 
@@ -8348,7 +8613,6 @@ input UserCreateWithoutAd_sources_addedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
   outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
@@ -8357,7 +8621,10 @@ input UserCreateWithoutAd_sources_addedInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutAds_placedInput {
@@ -8382,7 +8649,6 @@ input UserCreateWithoutAds_placedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
@@ -8391,7 +8657,10 @@ input UserCreateWithoutAds_placedInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutApplicant_screen_callsInput {
@@ -8415,7 +8684,6 @@ input UserCreateWithoutApplicant_screen_callsInput {
   references: ReferenceCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8425,7 +8693,10 @@ input UserCreateWithoutApplicant_screen_callsInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutApplicationsInput {
@@ -8449,7 +8720,6 @@ input UserCreateWithoutApplicationsInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8459,7 +8729,10 @@ input UserCreateWithoutApplicationsInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutArticles_addedInput {
@@ -8484,7 +8757,6 @@ input UserCreateWithoutArticles_addedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8493,7 +8765,10 @@ input UserCreateWithoutArticles_addedInput {
   consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutArticlesInput {
@@ -8517,7 +8792,6 @@ input UserCreateWithoutArticlesInput {
   references: ReferenceCreateManyWithoutApplicantInput
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8527,7 +8801,10 @@ input UserCreateWithoutArticlesInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutBackgroundInput {
@@ -8551,7 +8828,6 @@ input UserCreateWithoutBackgroundInput {
   references: ReferenceCreateManyWithoutApplicantInput
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8561,7 +8837,10 @@ input UserCreateWithoutBackgroundInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutBackgrounds_orderedInput {
@@ -8586,7 +8865,6 @@ input UserCreateWithoutBackgrounds_orderedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8595,7 +8873,10 @@ input UserCreateWithoutBackgrounds_orderedInput {
   consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
   reference_calls: ReferenceCreateManyWithoutCallerInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutClientInput {
@@ -8619,7 +8900,6 @@ input UserCreateWithoutClientInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8629,7 +8909,10 @@ input UserCreateWithoutClientInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutClients_addedInput {
@@ -8653,7 +8936,6 @@ input UserCreateWithoutClients_addedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8663,7 +8945,10 @@ input UserCreateWithoutClients_addedInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutConsultant_jobsInput {
@@ -8687,7 +8972,6 @@ input UserCreateWithoutConsultant_jobsInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8697,7 +8981,10 @@ input UserCreateWithoutConsultant_jobsInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutConsultant_screen_callsInput {
@@ -8722,7 +9009,6 @@ input UserCreateWithoutConsultant_screen_callsInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8731,7 +9017,46 @@ input UserCreateWithoutConsultant_screen_callsInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
+}
+
+input UserCreateWithoutExpenses_addedInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationCreateManyWithoutApplicationInput
+  consultant_jobs: JobCreateManyWithoutConsultantsInput
+  client: ClientCreateOneWithoutPersonnelInput
+  clients_added: ClientCreateManyWithoutAddedByInput
+  jobs_added: JobCreateManyWithoutAddedByInput
+  references: ReferenceCreateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
+  background: BackgroundCreateOneWithoutApplicantInput
+  articles: ArticleCreateManyWithoutApplicantInput
+  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
+  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
+  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
+  outreach_calls: OutreachCallCreateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
+  reference_calls: ReferenceCreateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutExpenses_paidInput {
@@ -8756,7 +9081,6 @@ input UserCreateWithoutExpenses_paidInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8766,40 +9090,9 @@ input UserCreateWithoutExpenses_paidInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
-}
-
-input UserCreateWithoutExpensesInput {
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
-  address: String
-  city: String
-  state: String
-  zip: Int
-  phone: String
-  last_login: DateTime
-  online: Boolean
-  type: UserType
-  applications: ApplicationCreateManyWithoutApplicationInput
-  consultant_jobs: JobCreateManyWithoutConsultantsInput
-  client: ClientCreateOneWithoutPersonnelInput
-  clients_added: ClientCreateManyWithoutAddedByInput
-  jobs_added: JobCreateManyWithoutAddedByInput
-  references: ReferenceCreateManyWithoutApplicantInput
-  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
-  background: BackgroundCreateOneWithoutApplicantInput
-  articles: ArticleCreateManyWithoutApplicantInput
-  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
-  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
-  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
-  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
-  outreach_calls: OutreachCallCreateManyWithoutCallerInput
-  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
-  reference_calls: ReferenceCreateManyWithoutCallerInput
-  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
-  articles_added: ArticleCreateManyWithoutAddedByInput
-  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutJobs_addedInput {
@@ -8823,7 +9116,6 @@ input UserCreateWithoutJobs_addedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8833,7 +9125,10 @@ input UserCreateWithoutJobs_addedInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutOutreach_callsInput {
@@ -8858,7 +9153,6 @@ input UserCreateWithoutOutreach_callsInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8867,7 +9161,10 @@ input UserCreateWithoutOutreach_callsInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutOutreach_targetInput {
@@ -8892,7 +9189,6 @@ input UserCreateWithoutOutreach_targetInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
   outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
@@ -8901,7 +9197,10 @@ input UserCreateWithoutOutreach_targetInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutOutreach_targets_addedInput {
@@ -8926,7 +9225,6 @@ input UserCreateWithoutOutreach_targets_addedInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8935,7 +9233,82 @@ input UserCreateWithoutOutreach_targets_addedInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
+}
+
+input UserCreateWithoutPayments_addedInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationCreateManyWithoutApplicationInput
+  consultant_jobs: JobCreateManyWithoutConsultantsInput
+  client: ClientCreateOneWithoutPersonnelInput
+  clients_added: ClientCreateManyWithoutAddedByInput
+  jobs_added: JobCreateManyWithoutAddedByInput
+  references: ReferenceCreateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
+  background: BackgroundCreateOneWithoutApplicantInput
+  articles: ArticleCreateManyWithoutApplicantInput
+  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
+  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
+  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
+  outreach_calls: OutreachCallCreateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
+  reference_calls: ReferenceCreateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
+  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
+}
+
+input UserCreateWithoutPayments_paidInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationCreateManyWithoutApplicationInput
+  consultant_jobs: JobCreateManyWithoutConsultantsInput
+  client: ClientCreateOneWithoutPersonnelInput
+  clients_added: ClientCreateManyWithoutAddedByInput
+  jobs_added: JobCreateManyWithoutAddedByInput
+  references: ReferenceCreateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
+  background: BackgroundCreateOneWithoutApplicantInput
+  articles: ArticleCreateManyWithoutApplicantInput
+  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
+  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
+  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
+  outreach_calls: OutreachCallCreateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
+  reference_calls: ReferenceCreateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
+  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutReference_callsInput {
@@ -8960,7 +9333,6 @@ input UserCreateWithoutReference_callsInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -8969,7 +9341,10 @@ input UserCreateWithoutReference_callsInput {
   consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 input UserCreateWithoutReferencesInput {
@@ -8993,7 +9368,6 @@ input UserCreateWithoutReferencesInput {
   applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
   background: BackgroundCreateOneWithoutApplicantInput
   articles: ArticleCreateManyWithoutApplicantInput
-  expenses: ExpenseCreateManyWithoutConsultantInput
   outreach_target: OutreachTargetCreateOneWithoutUserIdInput
   ad_sources_added: AdSourceCreateManyWithoutAddedByInput
   ads_placed: AdPlacedCreateManyWithoutPlacedByInput
@@ -9003,7 +9377,10 @@ input UserCreateWithoutReferencesInput {
   reference_calls: ReferenceCreateManyWithoutCallerInput
   backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
   articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaidByInput
 }
 
 """An edge in a connection."""
@@ -9134,7 +9511,6 @@ input UserUpdateDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9144,7 +9520,10 @@ input UserUpdateDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateInput {
@@ -9169,7 +9548,6 @@ input UserUpdateInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9179,7 +9557,10 @@ input UserUpdateInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateManyWithoutClientInput {
@@ -9297,6 +9678,15 @@ input UserUpdateOneWithoutConsultant_screen_callsInput {
   upsert: UserUpsertWithoutConsultant_screen_callsInput
 }
 
+input UserUpdateOneWithoutExpenses_addedInput {
+  create: UserCreateWithoutExpenses_addedInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutExpenses_addedDataInput
+  upsert: UserUpsertWithoutExpenses_addedInput
+}
+
 input UserUpdateOneWithoutExpenses_paidInput {
   create: UserCreateWithoutExpenses_paidInput
   connect: UserWhereUniqueInput
@@ -9304,15 +9694,6 @@ input UserUpdateOneWithoutExpenses_paidInput {
   delete: Boolean
   update: UserUpdateWithoutExpenses_paidDataInput
   upsert: UserUpsertWithoutExpenses_paidInput
-}
-
-input UserUpdateOneWithoutExpensesInput {
-  create: UserCreateWithoutExpensesInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: UserUpdateWithoutExpensesDataInput
-  upsert: UserUpsertWithoutExpensesInput
 }
 
 input UserUpdateOneWithoutJobs_addedInput {
@@ -9348,6 +9729,24 @@ input UserUpdateOneWithoutOutreach_targets_addedInput {
   delete: Boolean
   update: UserUpdateWithoutOutreach_targets_addedDataInput
   upsert: UserUpsertWithoutOutreach_targets_addedInput
+}
+
+input UserUpdateOneWithoutPayments_addedInput {
+  create: UserCreateWithoutPayments_addedInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutPayments_addedDataInput
+  upsert: UserUpsertWithoutPayments_addedInput
+}
+
+input UserUpdateOneWithoutPayments_paidInput {
+  create: UserCreateWithoutPayments_paidInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutPayments_paidDataInput
+  upsert: UserUpsertWithoutPayments_paidInput
 }
 
 input UserUpdateOneWithoutReference_callsInput {
@@ -9390,7 +9789,6 @@ input UserUpdateWithoutAd_sources_addedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
   outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
@@ -9399,7 +9797,10 @@ input UserUpdateWithoutAd_sources_addedDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutAds_placedDataInput {
@@ -9424,7 +9825,6 @@ input UserUpdateWithoutAds_placedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
@@ -9433,7 +9833,10 @@ input UserUpdateWithoutAds_placedDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutApplicant_screen_callsDataInput {
@@ -9457,7 +9860,6 @@ input UserUpdateWithoutApplicant_screen_callsDataInput {
   references: ReferenceUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9467,7 +9869,10 @@ input UserUpdateWithoutApplicant_screen_callsDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutApplicationsDataInput {
@@ -9491,7 +9896,6 @@ input UserUpdateWithoutApplicationsDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9501,7 +9905,10 @@ input UserUpdateWithoutApplicationsDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutArticles_addedDataInput {
@@ -9526,7 +9933,6 @@ input UserUpdateWithoutArticles_addedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9535,7 +9941,10 @@ input UserUpdateWithoutArticles_addedDataInput {
   consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutArticlesDataInput {
@@ -9559,7 +9968,6 @@ input UserUpdateWithoutArticlesDataInput {
   references: ReferenceUpdateManyWithoutApplicantInput
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9569,7 +9977,10 @@ input UserUpdateWithoutArticlesDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutBackgroundDataInput {
@@ -9593,7 +10004,6 @@ input UserUpdateWithoutBackgroundDataInput {
   references: ReferenceUpdateManyWithoutApplicantInput
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9603,7 +10013,10 @@ input UserUpdateWithoutBackgroundDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutBackgrounds_orderedDataInput {
@@ -9628,7 +10041,6 @@ input UserUpdateWithoutBackgrounds_orderedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9637,7 +10049,10 @@ input UserUpdateWithoutBackgrounds_orderedDataInput {
   consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutClientDataInput {
@@ -9661,7 +10076,6 @@ input UserUpdateWithoutClientDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9671,7 +10085,10 @@ input UserUpdateWithoutClientDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutClients_addedDataInput {
@@ -9695,7 +10112,6 @@ input UserUpdateWithoutClients_addedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9705,7 +10121,10 @@ input UserUpdateWithoutClients_addedDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutConsultant_jobsDataInput {
@@ -9729,7 +10148,6 @@ input UserUpdateWithoutConsultant_jobsDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9739,7 +10157,10 @@ input UserUpdateWithoutConsultant_jobsDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutConsultant_screen_callsDataInput {
@@ -9764,7 +10185,6 @@ input UserUpdateWithoutConsultant_screen_callsDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9773,7 +10193,46 @@ input UserUpdateWithoutConsultant_screen_callsDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
+}
+
+input UserUpdateWithoutExpenses_addedDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationUpdateManyWithoutApplicationInput
+  consultant_jobs: JobUpdateManyWithoutConsultantsInput
+  client: ClientUpdateOneWithoutPersonnelInput
+  clients_added: ClientUpdateManyWithoutAddedByInput
+  jobs_added: JobUpdateManyWithoutAddedByInput
+  references: ReferenceUpdateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
+  background: BackgroundUpdateOneWithoutApplicantInput
+  articles: ArticleUpdateManyWithoutApplicantInput
+  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
+  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
+  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
+  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
+  reference_calls: ReferenceUpdateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutExpenses_paidDataInput {
@@ -9798,7 +10257,6 @@ input UserUpdateWithoutExpenses_paidDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9808,40 +10266,9 @@ input UserUpdateWithoutExpenses_paidDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
-}
-
-input UserUpdateWithoutExpensesDataInput {
-  email: String
-  password: String
-  firstName: String
-  lastName: String
-  address: String
-  city: String
-  state: String
-  zip: Int
-  phone: String
-  last_login: DateTime
-  online: Boolean
-  type: UserType
-  applications: ApplicationUpdateManyWithoutApplicationInput
-  consultant_jobs: JobUpdateManyWithoutConsultantsInput
-  client: ClientUpdateOneWithoutPersonnelInput
-  clients_added: ClientUpdateManyWithoutAddedByInput
-  jobs_added: JobUpdateManyWithoutAddedByInput
-  references: ReferenceUpdateManyWithoutApplicantInput
-  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
-  background: BackgroundUpdateOneWithoutApplicantInput
-  articles: ArticleUpdateManyWithoutApplicantInput
-  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
-  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
-  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
-  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
-  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
-  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
-  reference_calls: ReferenceUpdateManyWithoutCallerInput
-  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
-  articles_added: ArticleUpdateManyWithoutAddedByInput
-  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutJobs_addedDataInput {
@@ -9865,7 +10292,6 @@ input UserUpdateWithoutJobs_addedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9875,7 +10301,10 @@ input UserUpdateWithoutJobs_addedDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutOutreach_callsDataInput {
@@ -9900,7 +10329,6 @@ input UserUpdateWithoutOutreach_callsDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9909,7 +10337,10 @@ input UserUpdateWithoutOutreach_callsDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutOutreach_targetDataInput {
@@ -9934,7 +10365,6 @@ input UserUpdateWithoutOutreach_targetDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
   outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
@@ -9943,7 +10373,10 @@ input UserUpdateWithoutOutreach_targetDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutOutreach_targets_addedDataInput {
@@ -9968,7 +10401,6 @@ input UserUpdateWithoutOutreach_targets_addedDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -9977,7 +10409,82 @@ input UserUpdateWithoutOutreach_targets_addedDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
+}
+
+input UserUpdateWithoutPayments_addedDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationUpdateManyWithoutApplicationInput
+  consultant_jobs: JobUpdateManyWithoutConsultantsInput
+  client: ClientUpdateOneWithoutPersonnelInput
+  clients_added: ClientUpdateManyWithoutAddedByInput
+  jobs_added: JobUpdateManyWithoutAddedByInput
+  references: ReferenceUpdateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
+  background: BackgroundUpdateOneWithoutApplicantInput
+  articles: ArticleUpdateManyWithoutApplicantInput
+  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
+  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
+  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
+  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
+  reference_calls: ReferenceUpdateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
+  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
+}
+
+input UserUpdateWithoutPayments_paidDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: Int
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationUpdateManyWithoutApplicationInput
+  consultant_jobs: JobUpdateManyWithoutConsultantsInput
+  client: ClientUpdateOneWithoutPersonnelInput
+  clients_added: ClientUpdateManyWithoutAddedByInput
+  jobs_added: JobUpdateManyWithoutAddedByInput
+  references: ReferenceUpdateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
+  background: BackgroundUpdateOneWithoutApplicantInput
+  articles: ArticleUpdateManyWithoutApplicantInput
+  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
+  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
+  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
+  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
+  reference_calls: ReferenceUpdateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
+  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutReference_callsDataInput {
@@ -10002,7 +10509,6 @@ input UserUpdateWithoutReference_callsDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -10011,7 +10517,10 @@ input UserUpdateWithoutReference_callsDataInput {
   consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithoutReferencesDataInput {
@@ -10035,7 +10544,6 @@ input UserUpdateWithoutReferencesDataInput {
   applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
   background: BackgroundUpdateOneWithoutApplicantInput
   articles: ArticleUpdateManyWithoutApplicantInput
-  expenses: ExpenseUpdateManyWithoutConsultantInput
   outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
   ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
   ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
@@ -10045,7 +10553,10 @@ input UserUpdateWithoutReferencesDataInput {
   reference_calls: ReferenceUpdateManyWithoutCallerInput
   backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
   articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaidByInput
 }
 
 input UserUpdateWithWhereUniqueWithoutClientInput {
@@ -10113,14 +10624,14 @@ input UserUpsertWithoutConsultant_screen_callsInput {
   create: UserCreateWithoutConsultant_screen_callsInput!
 }
 
+input UserUpsertWithoutExpenses_addedInput {
+  update: UserUpdateWithoutExpenses_addedDataInput!
+  create: UserCreateWithoutExpenses_addedInput!
+}
+
 input UserUpsertWithoutExpenses_paidInput {
   update: UserUpdateWithoutExpenses_paidDataInput!
   create: UserCreateWithoutExpenses_paidInput!
-}
-
-input UserUpsertWithoutExpensesInput {
-  update: UserUpdateWithoutExpensesDataInput!
-  create: UserCreateWithoutExpensesInput!
 }
 
 input UserUpsertWithoutJobs_addedInput {
@@ -10141,6 +10652,16 @@ input UserUpsertWithoutOutreach_targetInput {
 input UserUpsertWithoutOutreach_targets_addedInput {
   update: UserUpdateWithoutOutreach_targets_addedDataInput!
   create: UserCreateWithoutOutreach_targets_addedInput!
+}
+
+input UserUpsertWithoutPayments_addedInput {
+  update: UserUpdateWithoutPayments_addedDataInput!
+  create: UserCreateWithoutPayments_addedInput!
+}
+
+input UserUpsertWithoutPayments_paidInput {
+  update: UserUpdateWithoutPayments_paidDataInput!
+  create: UserCreateWithoutPayments_paidInput!
 }
 
 input UserUpsertWithoutReference_callsInput {
@@ -10615,9 +11136,6 @@ input UserWhereInput {
   articles_every: ArticleWhereInput
   articles_some: ArticleWhereInput
   articles_none: ArticleWhereInput
-  expenses_every: ExpenseWhereInput
-  expenses_some: ExpenseWhereInput
-  expenses_none: ExpenseWhereInput
   outreach_target: OutreachTargetWhereInput
   ad_sources_added_every: AdSourceWhereInput
   ad_sources_added_some: AdSourceWhereInput
@@ -10643,15 +11161,21 @@ input UserWhereInput {
   articles_added_every: ArticleWhereInput
   articles_added_some: ArticleWhereInput
   articles_added_none: ArticleWhereInput
+  expenses_added_every: ExpenseWhereInput
+  expenses_added_some: ExpenseWhereInput
+  expenses_added_none: ExpenseWhereInput
   expenses_paid_every: ExpenseWhereInput
   expenses_paid_some: ExpenseWhereInput
   expenses_paid_none: ExpenseWhereInput
+  payments_added_every: PaymentWhereInput
+  payments_added_some: PaymentWhereInput
+  payments_added_none: PaymentWhereInput
+  payments_paid_every: PaymentWhereInput
+  payments_paid_some: PaymentWhereInput
+  payments_paid_none: PaymentWhereInput
   _MagicalBackRelation_PaymentUser_every: JobWhereInput
   _MagicalBackRelation_PaymentUser_some: JobWhereInput
   _MagicalBackRelation_PaymentUser_none: JobWhereInput
-  _MagicalBackRelation_PaidByJob_every: PaymentWhereInput
-  _MagicalBackRelation_PaidByJob_some: PaymentWhereInput
-  _MagicalBackRelation_PaidByJob_none: PaymentWhereInput
   _MagicalBackRelation_MainContactUser_every: JobWhereInput
   _MagicalBackRelation_MainContactUser_some: JobWhereInput
   _MagicalBackRelation_MainContactUser_none: JobWhereInput

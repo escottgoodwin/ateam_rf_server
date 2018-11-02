@@ -326,6 +326,32 @@ function add_expense(parent, { type, link, amount, expensePaidDate, expenseDate,
   )
 }
 
+function add_payment(parent, { phase, amount, paidDate, paidById, jobId }, ctx, info) {
+  const userId = getUserId(ctx)
+  const billDate = new Date()
+  return ctx.db.mutation.createPayment(
+    {
+      data: {
+        phase,
+        amount,
+        paidDate,
+        billDate,
+        addedBy: {
+          connect: { id: userId  }
+        },
+        paidBy: {
+          connect: { id: paidById }
+        },
+        job: {
+          connect: { id: jobId }
+        }
+      },
+    },
+    info
+  )
+}
+
+
 async function signup(parent, args, ctx, info) {
   const password = await bcrypt.hash(args.password, 10)
   const user = await ctx.db.mutation.createUser({
@@ -370,6 +396,7 @@ module.exports = {
   add_reference,
   add_article,
   add_expense,
+  add_payment,
   signup,
   login,
 }
