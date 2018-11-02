@@ -300,6 +300,32 @@ function add_article(parent, { jobId, applicantId, title, summary, link }, ctx, 
   )
 }
 
+function add_expense(parent, { type, link, amount, expensePaidDate, expenseDate, consultant, expensePaidById, jobId }, ctx, info) {
+  const userId = getUserId(ctx)
+  const articleDate = new Date()
+  return ctx.db.mutation.createExpense(
+    {
+      data: {
+        amount,
+        link,
+        type,
+        expenseDate,
+        expensePaidDate,
+        consultant: {
+          connect: { id: userId }
+        },
+        expensePaidBy: {
+          connect: { id: expensePaidById }
+        },
+        job: {
+          connect: { id: jobId }
+        }
+      },
+    },
+    info
+  )
+}
+
 async function signup(parent, args, ctx, info) {
   const password = await bcrypt.hash(args.password, 10)
   const user = await ctx.db.mutation.createUser({
@@ -343,6 +369,7 @@ module.exports = {
   add_screen_call,
   add_reference,
   add_article,
+  add_expense,
   signup,
   login,
 }
