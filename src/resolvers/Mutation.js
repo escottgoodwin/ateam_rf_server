@@ -197,7 +197,7 @@ function add_outreach_call(parent, { jobId, targetId, lm, callDate, notes, refer
   return ctx.db.mutation.createOutreachCall(
     {
       data: {
-        lm
+        lm,
         callDate,
         notes,
         referral,

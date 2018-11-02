@@ -3,7 +3,7 @@ async function jobs(parent, args, ctx, info) {
   const where = args.filter
       ? {
           OR: [
-            { id: args.id },
+            { id: args.filter },
             { jobTitle: args.filter },
             { location: args.filter }
           ],
@@ -14,19 +14,20 @@ async function jobs(parent, args, ctx, info) {
 }
 
 async function users(parent, args, ctx, info) {
+
   const where = args.filter
       ? {
           OR: [
-            { id: args.id },
+            { id: args.filter },
             { firstName: args.filter },
             { lastName: args.filter },
-            { address: args.address },
-            { city: args.city },
-            { state: args.state },
-            { zip: args.zip },
-            { phone: args.phone },
-            { online: args.online },
-            { type: args.state },
+            { address: args.filter },
+            { city: args.filter },
+            { state: args.filter },
+            { zip: args.filter },
+            { phone: args.filter },
+            { online: args.filter },
+            { type: args.filter },
             { email: args.filter }
           ],
         }
@@ -40,7 +41,7 @@ async function clients(parent, args, ctx, info) {
   const where = args.filter
       ? {
           OR: [
-            { id: args.id },
+            { id: args.filter },
             { clientName: args.filter },
           ],
         }
@@ -55,7 +56,7 @@ async function applications(parent, args, ctx, info) {
     const where = args.filter
         ? {
             OR: [
-              { id: args.id }
+              { id: args.filter }
             ],
           }
         : {}
@@ -68,7 +69,7 @@ async function ad_sources(parent, args, ctx, info) {
   const where = args.filter
       ? {
           OR: [
-            { id: args.id },
+            { id: args.filter },
             { pubName: args.filter },
           ],
         }
@@ -82,7 +83,7 @@ async function ads_placed(parent, args, ctx, info) {
   const where = args.filter
       ? {
           OR: [
-            { id: args.id }
+            { id: args.filter }
           ],
         }
       : {}
@@ -94,7 +95,7 @@ async function outreach_targets(parent, args, ctx, info) {
   const where = args.filter
       ? {
           OR: [
-            { id: args.id },
+            { id: args.filter },
             { firstName: args.filter },
             { lastName: args.filter },
             { organization: args.filter }

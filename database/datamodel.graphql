@@ -119,6 +119,7 @@ type AdSource {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String

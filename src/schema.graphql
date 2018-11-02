@@ -18,12 +18,6 @@ type Query {
   me: User
 }
 
-post_job,
-
-add_outreach_call,
-add_screen_call,
-add_reference,
-
 type Mutation {
   create_client(clientName: String!, address: String, city: String, state: String, zip: String, phone: String, email: String): Client!
   apply(jobId: ID!): Application!
@@ -33,11 +27,11 @@ type Mutation {
   add_outreach_target(firstName: String!, lastName: String!, organization: String!, title: String!, city: String, state: String, zip: String, phone: String, email: String): OutreachTarget!
   add_background(link: String, type: String, applicantId: ID!, jobId: ID!): Background!
   add_outreach_call(lm: DateTime, notes: String, call_date: DateTime, referral: String, targetId: ID!, jobId: ID!): OutreachCall!
-  add_screen_call(lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
-  add_reference(firstName: String!, lastName: String!, organization: String!, title: String!,phone: String, email: String, relation: String, lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
-  add_article(title: String!,summary: String, link: String, articleDate: DateTime, applicantId: ID!, addedBy: ID!, jobId: ID!)
-  add_expense(type: String!, link: String, amount: Float!, expensePaidDate: DateTime, expenseDate: DateTime, consultant: ID!, expensePaidById: ID!, jobId: ID!)
-  add_payment(phase: String!, amount: Float!, paidDate: DateTime, billDate: DateTime, paidById: ID!, jobId: ID!)
+  add_screen_call(lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!): ScreenCall!
+  add_reference(firstName: String!, lastName: String!, organization: String!, title: String!,phone: String, email: String, relation: String, lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!): Reference!
+  add_article(title: String!,summary: String, link: String, articleDate: DateTime, applicantId: ID!, addedBy: ID!, jobId: ID!): Article!
+  add_expense(type: String!, link: String, amount: Float!, expensePaidDate: DateTime, expenseDate: DateTime, consultant: ID!, expensePaidById: ID!, jobId: ID!): Expense!
+  add_payment(phase: String!, amount: Float!, paidDate: DateTime, billDate: DateTime, paidById: ID!, jobId: ID!): Payment!
   signup(email: String!, password: String!, firstName: String!,lastName: String!, type: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
 }

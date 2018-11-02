@@ -1,5 +1,5 @@
 # source: https://rfql.herokuapp.com/rfql/dev
-# timestamp: Thu Nov 01 2018 20:50:06 GMT-0700 (Pacific Daylight Time)
+# timestamp: Thu Nov 01 2018 21:27:35 GMT-0700 (Pacific Daylight Time)
 
 type AdPlaced implements Node {
   id: ID!
@@ -613,6 +613,7 @@ type AdSource implements Node {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -637,6 +638,7 @@ input AdSourceCreateInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -662,6 +664,7 @@ input AdSourceCreateWithoutAddedByInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -676,6 +679,7 @@ input AdSourceCreateWithoutAdsInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -708,6 +712,8 @@ enum AdSourceOrderByInput {
   city_DESC
   state_ASC
   state_DESC
+  zip_ASC
+  zip_DESC
   phone_ASC
   phone_DESC
   email_ASC
@@ -729,6 +735,7 @@ type AdSourcePreviousValues {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -781,6 +788,7 @@ input AdSourceUpdateInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -814,6 +822,7 @@ input AdSourceUpdateWithoutAddedByDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -828,6 +837,7 @@ input AdSourceUpdateWithoutAdsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   instructions: String
@@ -1161,6 +1171,46 @@ input AdSourceWhereInput {
 
   """All values not ending with the given string."""
   state_not_ends_with: String
+  zip: String
+
+  """All values that are not equal to given value."""
+  zip_not: String
+
+  """All values that are contained in given list."""
+  zip_in: [String!]
+
+  """All values that are not contained in given list."""
+  zip_not_in: [String!]
+
+  """All values less than the given value."""
+  zip_lt: String
+
+  """All values less than or equal the given value."""
+  zip_lte: String
+
+  """All values greater than the given value."""
+  zip_gt: String
+
+  """All values greater than or equal the given value."""
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
   phone: String
 
   """All values that are not equal to given value."""
