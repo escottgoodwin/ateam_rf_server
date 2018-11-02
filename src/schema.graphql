@@ -35,6 +35,12 @@ type Mutation {
   add_outreach_call(lm: DateTime, notes: String, call_date: DateTime, referral: String, targetId: ID!, jobId: ID!): OutreachCall!
   add_screen_call(lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
   add_reference(firstName: String!, lastName: String!, organization: String!, title: String!,phone: String, email: String, relation: String, lm: DateTime, callDate: DateTime, notes: String, applicant: ID!, application: ID!, jobId: ID!)
+
+  add_article(title: String!,summary: String, link: String, articleDate: DateTime, applicantId: ID!, addedBy: ID!, jobId: ID!)
+  add_expense(type: String!, link: String, amount: Float!, expensePaidDate: DateTime, expenseDate: DateTime, consultant: ID!, expensePaidBy: ID!, jobId: ID!)
+  add_payment(phase: String!, amount: Float!, paidDate: DateTime, billDate: DateTime, paidBy: ID!, jobId: ID!)
+
+
   signup(email: String!, password: String!, firstName: String!,lastName: String!, type: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
 }

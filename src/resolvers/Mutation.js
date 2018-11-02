@@ -278,6 +278,27 @@ function add_reference(parent, { jobId, applicantId, applicationId, lm, callDate
   )
 }
 
+function add_article(parent, { jobId, applicantId, title, summary, link }, ctx, info) {
+  const userId = getUserId(ctx)
+  const articleDate = new Date()
+  return ctx.db.mutation.createArticle(
+    {
+      data: {
+        title,
+        summary,
+        link,
+        articleDate,
+        applicant: {
+          connect: { id: applicantId }
+        },
+        addedBy: {
+          connect: { id: userId }
+        }
+      },
+    },
+    info
+  )
+}
 
 async function signup(parent, args, ctx, info) {
   const password = await bcrypt.hash(args.password, 10)
@@ -321,6 +342,7 @@ module.exports = {
   add_outreach_call,
   add_screen_call,
   add_reference,
+  add_article,
   signup,
   login,
 }

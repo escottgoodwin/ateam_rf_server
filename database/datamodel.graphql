@@ -89,6 +89,7 @@ type Job {
   expenses: [Expense!]! @relation(name: "ExpenseByJob")
   payments: [Payment!]! @relation(name: "PaymentByJob")
   targets: [OutreachTarget!]!  @relation(name: "OutreachTargetsByJob")
+  articles: [Article!]! @relation(name: "ArticleByJob")
 }
 
 type AdPlaced {
@@ -209,6 +210,7 @@ type Article {
   id: ID! @unique
   addedBy: User @relation(name: "ArticleAddedByByUser")
   applicant: User @relation(name: "ArticleByUser")
+  job: Job @relation(name: "ArticleByJob")
   articleDate: DateTime
   title: String
   summary: String
