@@ -34,7 +34,7 @@ async function login(parent, args, ctx, info) {
   }
 }
 
-function post_job(parent, { jobTitle, location, description, address, city, state, zip, clientId }, ctx, info) {
+function add_job(parent, { jobTitle, location, description, address, city, state, zip, clientId }, ctx, info) {
   const userId = getUserId(ctx)
   const addedDate = new Date()
   const brochure_sent = new Date()
@@ -84,7 +84,7 @@ function post_job(parent, { jobTitle, location, description, address, city, stat
   )
 }
 
-function create_client(parent, { clientName, address, city, state, zip, phone, email }, ctx, info) {
+function add_client(parent, { clientName, address, city, state, zip, phone, email }, ctx, info) {
   const userId = getUserId(ctx)
   const addedDate = new Date()
   return ctx.db.mutation.createClient(
@@ -128,7 +128,7 @@ function add_background(parent, { link, type, applicantId }, ctx, info) {
   )
 }
 
-function place_ad(parent, { jobTitle, copy, adLink, ran, cost, jobId, publicationId }, ctx, info) {
+function add_ad(parent, { jobTitle, copy, adLink, ran, cost, jobId, publicationId }, ctx, info) {
   const userId = getUserId(ctx)
   const addedDate = new Date()
   return ctx.db.mutation.createAdPlaced(
@@ -431,13 +431,13 @@ function update_background(parent, { link, type, applicantId }, ctx, info) {
 
 
 module.exports = {
-  post_job,
-  create_client,
+  add_job,
+  add_client,
   apply,
   add_background,
   add_outreach_target,
   add_ad_source,
-  place_ad,
+  add_ad,
   add_outreach_call,
   add_screen_call,
   add_reference,
