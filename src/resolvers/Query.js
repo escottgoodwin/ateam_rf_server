@@ -98,13 +98,119 @@ async function outreach_targets(parent, args, ctx, info) {
             { id: args.filter },
             { firstName: args.filter },
             { lastName: args.filter },
-            { organization: args.filter }
+            { organization: args.filter },
+            { title: args.filter }
           ],
         }
       : {}
 
     return await ctx.db.query.outreachTargets({ where }, info)
 }
+
+async function backgrounds(parent, args, ctx, info) {
+
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter }
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.backgrounds({ where }, info)
+}
+
+async function outreach_calls(parent, args, ctx, info) {
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { notes: args.filter },
+            { referral: args.filter }
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.outreachCalls({ where }, info)
+}
+
+async function screen_calls(parent, args, ctx, info) {
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { notes: args.filter }
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.screenCalls({ where }, info)
+}
+
+async function references(parent, args, ctx, info) {
+
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { firstName: args.filter },
+            { lastName: args.filter },
+            { title: args.filter },
+            { organization: args.filter },
+            { relation: args.filter },
+            { phone: args.filter },
+            { email: args.filter },
+            { notes: args.filter }
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.references({ where }, info)
+}
+
+async function articles(parent, args, ctx, info) {
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { title: args.filter },
+            { link: args.filter },
+            { summary: args.filter }
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.articles({ where }, info)
+}
+
+async function expenses(parent, args, ctx, info) {
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { type: args.filter },
+            { amount: args.filter },
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.expenses({ where }, info)
+}
+
+async function payments(parent, args, ctx, info) {
+  const where = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { phase: args.filter },
+            { amount: args.filter },
+          ],
+        }
+      : {}
+
+    return await ctx.db.query.payments({ where }, info)
+}
+
 
 module.exports = {
   jobs,
@@ -113,5 +219,12 @@ module.exports = {
   applications,
   outreach_targets,
   ads_placed,
-  ad_sources
+  ad_sources,
+  backgrounds,
+  outreach_calls,
+  screen_calls,
+  references,
+  articles,
+  expenses,
+  payments
 }

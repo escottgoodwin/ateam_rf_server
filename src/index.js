@@ -22,7 +22,7 @@ const server = new GraphQLServer({
     ...req,
     db: new Prisma({
       typeDefs: 'src/generated/prisma.graphql',
-      endpoint: "https://rfql.herokuapp.com/rfql/dev",
+      endpoint: "https://ateamrf-c53ef89a2d.herokuapp.com/rfql/dev",
       secret: 'mysecret123',
       debug: true
     }),

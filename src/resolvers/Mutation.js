@@ -3,6 +3,37 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserId } = require('../utils')
 var moment = require('moment');
 
+async function signup(parent, args, ctx, info) {
+  const password = await bcrypt.hash(args.password, 10)
+  const user = await ctx.db.mutation.createUser({
+    data: { ...args, password },
+  })
+
+  const token = jwt.sign({ userId: user.id }, APP_SECRET)
+
+  return {
+    token,
+    user,
+  }
+}
+
+async function login(parent, args, ctx, info) {
+  const user = await ctx.db.query.user({ where: { email: args.email } })
+  if (!user) {
+    throw new Error('No such user found')
+  }
+
+  const valid = await bcrypt.compare(args.password, user.password)
+  if (!valid) {
+    throw new Error('Invalid password')
+  }
+
+  return {
+    token: jwt.sign({ userId: user.id }, APP_SECRET),
+    user,
+  }
+}
+
 function post_job(parent, { jobTitle, location, description, address, city, state, zip, clientId }, ctx, info) {
   const userId = getUserId(ctx)
   const addedDate = new Date()
@@ -76,8 +107,8 @@ function create_client(parent, { clientName, address, city, state, zip, phone, e
   )
 }
 
-function add_background(parent, { link, type, userId }, ctx, info) {
-
+function add_background(parent, { link, type, applicantId }, ctx, info) {
+  const userId = getUserId(ctx)
   const addedDate = new Date()
   return ctx.db.mutation.createBackground(
     {
@@ -86,6 +117,9 @@ function add_background(parent, { link, type, userId }, ctx, info) {
         type,
         backgroundDate: addedDate,
         applicant: {
+          connect: { id: applicantId },
+        },
+        orderedBy: {
           connect: { id: userId },
         }
       },
@@ -216,16 +250,15 @@ function add_outreach_call(parent, { jobId, targetId, lm, callDate, notes, refer
   )
 }
 
-function add_screen_call(parent, { jobId, applicantId, applicationId, lm, callDate, notes, referral }, ctx, info) {
+function add_screen_call(parent, { jobId, applicantId, applicationId, lm, notes }, ctx, info) {
   const userId = getUserId(ctx)
-  const appDate = new Date()
+  const callDate = new Date()
   return ctx.db.mutation.createScreenCall(
     {
       data: {
         lm,
         callDate,
         notes,
-        referral,
         application: {
           connect: { id: applicationId }
         },
@@ -246,7 +279,7 @@ function add_screen_call(parent, { jobId, applicantId, applicationId, lm, callDa
 
 function add_reference(parent, { jobId, applicantId, applicationId, lm, callDate, notes, firstName, lastName, organization, title, relation, phone, email }, ctx, info) {
   const userId = getUserId(ctx)
-  const appDate = new Date()
+
   return ctx.db.mutation.createReference(
     {
       data: {
@@ -291,6 +324,9 @@ function add_article(parent, { jobId, applicantId, title, summary, link }, ctx, 
         applicant: {
           connect: { id: applicantId }
         },
+        job: {
+          connect: { id: jobId }
+        },
         addedBy: {
           connect: { id: userId }
         }
@@ -300,9 +336,9 @@ function add_article(parent, { jobId, applicantId, title, summary, link }, ctx, 
   )
 }
 
-function add_expense(parent, { type, link, amount, expensePaidDate, expenseDate, consultant, expensePaidById, jobId }, ctx, info) {
+function add_expense(parent, { type, link, amount, jobId }, ctx, info) {
   const userId = getUserId(ctx)
-  const articleDate = new Date()
+  const expenseDate = new Date()
   return ctx.db.mutation.createExpense(
     {
       data: {
@@ -310,12 +346,8 @@ function add_expense(parent, { type, link, amount, expensePaidDate, expenseDate,
         link,
         type,
         expenseDate,
-        expensePaidDate,
         consultant: {
           connect: { id: userId }
-        },
-        expensePaidBy: {
-          connect: { id: expensePaidById }
         },
         job: {
           connect: { id: jobId }
@@ -326,7 +358,7 @@ function add_expense(parent, { type, link, amount, expensePaidDate, expenseDate,
   )
 }
 
-function add_payment(parent, { phase, amount, paidDate, paidById, jobId }, ctx, info) {
+function add_payment(parent, { phase, amount, jobId }, ctx, info) {
   const userId = getUserId(ctx)
   const billDate = new Date()
   return ctx.db.mutation.createPayment(
@@ -334,13 +366,9 @@ function add_payment(parent, { phase, amount, paidDate, paidById, jobId }, ctx, 
       data: {
         phase,
         amount,
-        paidDate,
         billDate,
         addedBy: {
           connect: { id: userId  }
-        },
-        paidBy: {
-          connect: { id: paidById }
         },
         job: {
           connect: { id: jobId }
@@ -352,36 +380,55 @@ function add_payment(parent, { phase, amount, paidDate, paidById, jobId }, ctx, 
 }
 
 
-async function signup(parent, args, ctx, info) {
-  const password = await bcrypt.hash(args.password, 10)
-  const user = await ctx.db.mutation.createUser({
-    data: { ...args, password },
-  })
-
-  const token = jwt.sign({ userId: user.id }, APP_SECRET)
-
-  return {
-    token,
-    user,
-  }
+function update_client(parent, { id, clientName, address, city, state, zip, phone, email }, ctx, info) {
+  const userId = getUserId(ctx)
+  const updateDate = new Date()
+  return ctx.db.mutation.updateClient(
+    {
+      data: {
+        clientName,
+        address,
+        city,
+        state,
+        zip,
+        phone,
+        email,
+        updateDate,
+        updatedBy: {
+          connect: { id: userId  }
+        }
+      },
+      where: {
+        id: id
+      },
+    },
+    info
+  )
 }
 
-async function login(parent, args, ctx, info) {
-  const user = await ctx.db.query.user({ where: { email: args.email } })
-  if (!user) {
-    throw new Error('No such user found')
-  }
-
-  const valid = await bcrypt.compare(args.password, user.password)
-  if (!valid) {
-    throw new Error('Invalid password')
-  }
-
-  return {
-    token: jwt.sign({ userId: user.id }, APP_SECRET),
-    user,
-  }
+function update_background(parent, { link, type, applicantId }, ctx, info) {
+  const userId = getUserId(ctx)
+  const updateDate = new Date()
+  return ctx.db.mutation.updateBackground(
+    {
+      data: {
+        link,
+        type,
+        updateDate,
+        updatedBy: {
+          connect: { id: userId  }
+        },
+      },
+      where: {
+        id: applicantId
+      },
+    },
+    info
+  )
 }
+
+
+
 
 module.exports = {
   post_job,
@@ -397,6 +444,8 @@ module.exports = {
   add_article,
   add_expense,
   add_payment,
+  update_client,
+  update_background,
   signup,
   login,
 }

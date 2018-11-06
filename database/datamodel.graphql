@@ -16,7 +16,7 @@ type User {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -43,6 +43,8 @@ type User {
   expenses_paid: [Expense!]! @relation(name: "ExpensePaidByUser")
   payments_added: [Payment!]! @relation(name: "AddedByPayment")
   payments_paid: [Payment!]! @relation(name: "PaymentPaidByUser")
+  client_updates: [Client!]! @relation(name: "ClientUpdateUser")
+  background_updates: [Background!]! @relation(name: "BackgroundUpdateUser")
 }
 
 type Client {
@@ -50,10 +52,12 @@ type Client {
   clientName: String!
   addedBy: User @relation(name: "ClientAddUser")
   addedDate: DateTime
+  updatedBy: User @relation(name: "ClientUpdateUser")
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   jobs: [Job!]! @relation(name: "JobsByClient")
@@ -72,6 +76,7 @@ type Job {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean @default(value: "false")
   publishedDate: DateTime
@@ -138,6 +143,7 @@ type OutreachTarget {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   calls: [OutreachCall!]! @relation(name: "OutreachCallByOutreachTarget")
@@ -166,7 +172,7 @@ type OutreachCall {
   caller: User @relation(name: "OutreachCallerByUser")
   job: Job @relation(name: "OutreachCallByJob")
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
 }
@@ -204,6 +210,8 @@ type Background {
   id: ID! @unique
   orderedBy: User @relation(name: "BackgroundOrderedByUser")
   applicant: User @relation(name: "BackgroundByUser")
+  updatedBy: User @relation(name: "BackgroundUpdateUser")
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
@@ -211,9 +219,9 @@ type Background {
 
 type Article {
   id: ID! @unique
-  addedBy: User @relation(name: "ArticleAddedByByUser")
-  applicant: User @relation(name: "ArticleByUser")
-  job: Job @relation(name: "ArticleByJob")
+  addedBy: User! @relation(name: "ArticleAddedByByUser")
+  applicant: User! @relation(name: "ArticleByUser")
+  job: Job! @relation(name: "ArticleByJob")
   articleDate: DateTime
   title: String
   summary: String
@@ -235,10 +243,10 @@ type Expense {
 type Payment {
   id: ID! @unique
   job: Job @relation(name: "PaymentByJob")
-  paidBy: User @relation(name: "PaymentPaidByUser")
   addedBy: User @relation(name: "AddedByPayment")
   billDate: DateTime
-  paidDate: DateTime
+  paymentBy: User @relation(name: "PaymentPaidByUser")
+  paymentDate: DateTime
   phase: String
   amount: Float
 }

@@ -1,11 +1,11 @@
-# source: https://rfql.herokuapp.com/rfql/dev
-# timestamp: Thu Nov 01 2018 21:27:35 GMT-0700 (Pacific Daylight Time)
+# source: https://ateamrf-c53ef89a2d.herokuapp.com/rfql/dev
+# timestamp: Mon Nov 05 2018 21:40:38 GMT-0800 (Pacific Standard Time)
 
 type AdPlaced implements Node {
   id: ID!
-  adSource(where: AdSourceWhereInput): AdSource
-  job(where: JobWhereInput): Job
-  placedBy(where: UserWhereInput): User
+  adSource: AdSource
+  job: Job
+  placedBy: User
   addedDate: DateTime
   copy: String
   adLink: String
@@ -206,6 +206,16 @@ input AdPlacedUpdateInput {
   job: JobUpdateOneWithoutAds_placedInput
   placedBy: UserUpdateOneWithoutAds_placedInput
   applications: ApplicationUpdateManyWithoutAdRefInput
+}
+
+input AdPlacedUpdateManyMutationInput {
+  addedDate: DateTime
+  copy: String
+  adLink: String
+  delivered: DateTime
+  ran: String
+  cost: Float
+  paid: DateTime
 }
 
 input AdPlacedUpdateManyWithoutAdSourceInput {
@@ -606,7 +616,7 @@ input AdPlacedWhereUniqueInput {
 type AdSource implements Node {
   id: ID!
   addedDate: DateTime
-  addedBy(where: UserWhereInput): User!
+  addedBy: User!
   pubName: String!
   firstName: String
   lastName: String
@@ -792,8 +802,22 @@ input AdSourceUpdateInput {
   phone: String
   email: String
   instructions: String
-  addedBy: UserUpdateOneWithoutAd_sources_addedInput
+  addedBy: UserUpdateOneRequiredWithoutAd_sources_addedInput
   ads: AdPlacedUpdateManyWithoutAdSourceInput
+}
+
+input AdSourceUpdateManyMutationInput {
+  addedDate: DateTime
+  pubName: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  email: String
+  instructions: String
 }
 
 input AdSourceUpdateManyWithoutAddedByInput {
@@ -841,7 +865,7 @@ input AdSourceUpdateWithoutAdsDataInput {
   phone: String
   email: String
   instructions: String
-  addedBy: UserUpdateOneWithoutAd_sources_addedInput
+  addedBy: UserUpdateOneRequiredWithoutAd_sources_addedInput
 }
 
 input AdSourceUpdateWithWhereUniqueWithoutAddedByInput {
@@ -1399,9 +1423,9 @@ type AggregateUser {
 
 type Application implements Node {
   id: ID!
-  job(where: JobWhereInput): Job!
-  application(where: UserWhereInput): User!
-  adRef(where: AdPlacedWhereInput): AdPlaced
+  job: Job!
+  application: User!
+  adRef: AdPlaced
   appDate: DateTime
   withdrawDate: DateTime
   withdrawn: Boolean
@@ -1410,7 +1434,7 @@ type Application implements Node {
   finalist: Boolean
   salary: Float
   references(where: ReferenceWhereInput, orderBy: ReferenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reference!]
-  screen_call(where: ScreenCallWhereInput): ScreenCall
+  screen_call: ScreenCall
 }
 
 """A connection to a list of items."""
@@ -1623,11 +1647,21 @@ input ApplicationUpdateInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  job: JobUpdateOneWithoutApplicationsInput
-  application: UserUpdateOneWithoutApplicationsInput
+  job: JobUpdateOneRequiredWithoutApplicationsInput
+  application: UserUpdateOneRequiredWithoutApplicationsInput
   adRef: AdPlacedUpdateOneWithoutApplicationsInput
   references: ReferenceUpdateManyWithoutApplicationInput
   screen_call: ScreenCallUpdateOneWithoutApplicationInput
+}
+
+input ApplicationUpdateManyMutationInput {
+  appDate: DateTime
+  withdrawDate: DateTime
+  withdrawn: Boolean
+  selected: Boolean
+  screened: Boolean
+  finalist: Boolean
+  salary: Float
 }
 
 input ApplicationUpdateManyWithoutAdRefInput {
@@ -1683,8 +1717,8 @@ input ApplicationUpdateWithoutAdRefDataInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  job: JobUpdateOneWithoutApplicationsInput
-  application: UserUpdateOneWithoutApplicationsInput
+  job: JobUpdateOneRequiredWithoutApplicationsInput
+  application: UserUpdateOneRequiredWithoutApplicationsInput
   references: ReferenceUpdateManyWithoutApplicationInput
   screen_call: ScreenCallUpdateOneWithoutApplicationInput
 }
@@ -1697,7 +1731,7 @@ input ApplicationUpdateWithoutApplicationDataInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  job: JobUpdateOneWithoutApplicationsInput
+  job: JobUpdateOneRequiredWithoutApplicationsInput
   adRef: AdPlacedUpdateOneWithoutApplicationsInput
   references: ReferenceUpdateManyWithoutApplicationInput
   screen_call: ScreenCallUpdateOneWithoutApplicationInput
@@ -1711,7 +1745,7 @@ input ApplicationUpdateWithoutJobDataInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  application: UserUpdateOneWithoutApplicationsInput
+  application: UserUpdateOneRequiredWithoutApplicationsInput
   adRef: AdPlacedUpdateOneWithoutApplicationsInput
   references: ReferenceUpdateManyWithoutApplicationInput
   screen_call: ScreenCallUpdateOneWithoutApplicationInput
@@ -1725,8 +1759,8 @@ input ApplicationUpdateWithoutReferencesDataInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  job: JobUpdateOneWithoutApplicationsInput
-  application: UserUpdateOneWithoutApplicationsInput
+  job: JobUpdateOneRequiredWithoutApplicationsInput
+  application: UserUpdateOneRequiredWithoutApplicationsInput
   adRef: AdPlacedUpdateOneWithoutApplicationsInput
   screen_call: ScreenCallUpdateOneWithoutApplicationInput
 }
@@ -1739,8 +1773,8 @@ input ApplicationUpdateWithoutScreen_callDataInput {
   screened: Boolean
   finalist: Boolean
   salary: Float
-  job: JobUpdateOneWithoutApplicationsInput
-  application: UserUpdateOneWithoutApplicationsInput
+  job: JobUpdateOneRequiredWithoutApplicationsInput
+  application: UserUpdateOneRequiredWithoutApplicationsInput
   adRef: AdPlacedUpdateOneWithoutApplicationsInput
   references: ReferenceUpdateManyWithoutApplicationInput
 }
@@ -1934,9 +1968,9 @@ input ApplicationWhereUniqueInput {
 
 type Article implements Node {
   id: ID!
-  addedBy(where: UserWhereInput): User
-  applicant(where: UserWhereInput): User
-  job(where: JobWhereInput): Job
+  addedBy: User!
+  applicant: User!
+  job: Job!
   articleDate: DateTime
   title: String
   summary: String
@@ -1958,9 +1992,9 @@ input ArticleCreateInput {
   title: String
   summary: String
   link: String
-  addedBy: UserCreateOneWithoutArticles_addedInput
-  applicant: UserCreateOneWithoutArticlesInput
-  job: JobCreateOneWithoutArticlesInput
+  addedBy: UserCreateOneWithoutArticles_addedInput!
+  applicant: UserCreateOneWithoutArticlesInput!
+  job: JobCreateOneWithoutArticlesInput!
 }
 
 input ArticleCreateManyWithoutAddedByInput {
@@ -1983,8 +2017,8 @@ input ArticleCreateWithoutAddedByInput {
   title: String
   summary: String
   link: String
-  applicant: UserCreateOneWithoutArticlesInput
-  job: JobCreateOneWithoutArticlesInput
+  applicant: UserCreateOneWithoutArticlesInput!
+  job: JobCreateOneWithoutArticlesInput!
 }
 
 input ArticleCreateWithoutApplicantInput {
@@ -1992,8 +2026,8 @@ input ArticleCreateWithoutApplicantInput {
   title: String
   summary: String
   link: String
-  addedBy: UserCreateOneWithoutArticles_addedInput
-  job: JobCreateOneWithoutArticlesInput
+  addedBy: UserCreateOneWithoutArticles_addedInput!
+  job: JobCreateOneWithoutArticlesInput!
 }
 
 input ArticleCreateWithoutJobInput {
@@ -2001,8 +2035,8 @@ input ArticleCreateWithoutJobInput {
   title: String
   summary: String
   link: String
-  addedBy: UserCreateOneWithoutArticles_addedInput
-  applicant: UserCreateOneWithoutArticlesInput
+  addedBy: UserCreateOneWithoutArticles_addedInput!
+  applicant: UserCreateOneWithoutArticlesInput!
 }
 
 """An edge in a connection."""
@@ -2083,9 +2117,16 @@ input ArticleUpdateInput {
   title: String
   summary: String
   link: String
-  addedBy: UserUpdateOneWithoutArticles_addedInput
-  applicant: UserUpdateOneWithoutArticlesInput
-  job: JobUpdateOneWithoutArticlesInput
+  addedBy: UserUpdateOneRequiredWithoutArticles_addedInput
+  applicant: UserUpdateOneRequiredWithoutArticlesInput
+  job: JobUpdateOneRequiredWithoutArticlesInput
+}
+
+input ArticleUpdateManyMutationInput {
+  articleDate: DateTime
+  title: String
+  summary: String
+  link: String
 }
 
 input ArticleUpdateManyWithoutAddedByInput {
@@ -2120,8 +2161,8 @@ input ArticleUpdateWithoutAddedByDataInput {
   title: String
   summary: String
   link: String
-  applicant: UserUpdateOneWithoutArticlesInput
-  job: JobUpdateOneWithoutArticlesInput
+  applicant: UserUpdateOneRequiredWithoutArticlesInput
+  job: JobUpdateOneRequiredWithoutArticlesInput
 }
 
 input ArticleUpdateWithoutApplicantDataInput {
@@ -2129,8 +2170,8 @@ input ArticleUpdateWithoutApplicantDataInput {
   title: String
   summary: String
   link: String
-  addedBy: UserUpdateOneWithoutArticles_addedInput
-  job: JobUpdateOneWithoutArticlesInput
+  addedBy: UserUpdateOneRequiredWithoutArticles_addedInput
+  job: JobUpdateOneRequiredWithoutArticlesInput
 }
 
 input ArticleUpdateWithoutJobDataInput {
@@ -2138,8 +2179,8 @@ input ArticleUpdateWithoutJobDataInput {
   title: String
   summary: String
   link: String
-  addedBy: UserUpdateOneWithoutArticles_addedInput
-  applicant: UserUpdateOneWithoutArticlesInput
+  addedBy: UserUpdateOneRequiredWithoutArticles_addedInput
+  applicant: UserUpdateOneRequiredWithoutArticlesInput
 }
 
 input ArticleUpdateWithWhereUniqueWithoutAddedByInput {
@@ -2377,8 +2418,10 @@ input ArticleWhereUniqueInput {
 
 type Background implements Node {
   id: ID!
-  orderedBy(where: UserWhereInput): User
-  applicant(where: UserWhereInput): User
+  orderedBy: User
+  applicant: User
+  updatedBy: User
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
@@ -2395,15 +2438,22 @@ type BackgroundConnection {
 }
 
 input BackgroundCreateInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
   orderedBy: UserCreateOneWithoutBackgrounds_orderedInput
   applicant: UserCreateOneWithoutBackgroundInput
+  updatedBy: UserCreateOneWithoutBackground_updatesInput
 }
 
 input BackgroundCreateManyWithoutOrderedByInput {
   create: [BackgroundCreateWithoutOrderedByInput!]
+  connect: [BackgroundWhereUniqueInput!]
+}
+
+input BackgroundCreateManyWithoutUpdatedByInput {
+  create: [BackgroundCreateWithoutUpdatedByInput!]
   connect: [BackgroundWhereUniqueInput!]
 }
 
@@ -2413,16 +2463,29 @@ input BackgroundCreateOneWithoutApplicantInput {
 }
 
 input BackgroundCreateWithoutApplicantInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
   orderedBy: UserCreateOneWithoutBackgrounds_orderedInput
+  updatedBy: UserCreateOneWithoutBackground_updatesInput
 }
 
 input BackgroundCreateWithoutOrderedByInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
+  applicant: UserCreateOneWithoutBackgroundInput
+  updatedBy: UserCreateOneWithoutBackground_updatesInput
+}
+
+input BackgroundCreateWithoutUpdatedByInput {
+  updateDate: DateTime
+  backgroundDate: DateTime
+  type: String
+  link: String
+  orderedBy: UserCreateOneWithoutBackgrounds_orderedInput
   applicant: UserCreateOneWithoutBackgroundInput
 }
 
@@ -2438,6 +2501,8 @@ type BackgroundEdge {
 enum BackgroundOrderByInput {
   id_ASC
   id_DESC
+  updateDate_ASC
+  updateDate_DESC
   backgroundDate_ASC
   backgroundDate_DESC
   type_ASC
@@ -2452,6 +2517,7 @@ enum BackgroundOrderByInput {
 
 type BackgroundPreviousValues {
   id: ID!
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
@@ -2497,11 +2563,20 @@ input BackgroundSubscriptionWhereInput {
 }
 
 input BackgroundUpdateInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
   orderedBy: UserUpdateOneWithoutBackgrounds_orderedInput
   applicant: UserUpdateOneWithoutBackgroundInput
+  updatedBy: UserUpdateOneWithoutBackground_updatesInput
+}
+
+input BackgroundUpdateManyMutationInput {
+  updateDate: DateTime
+  backgroundDate: DateTime
+  type: String
+  link: String
 }
 
 input BackgroundUpdateManyWithoutOrderedByInput {
@@ -2511,6 +2586,15 @@ input BackgroundUpdateManyWithoutOrderedByInput {
   delete: [BackgroundWhereUniqueInput!]
   update: [BackgroundUpdateWithWhereUniqueWithoutOrderedByInput!]
   upsert: [BackgroundUpsertWithWhereUniqueWithoutOrderedByInput!]
+}
+
+input BackgroundUpdateManyWithoutUpdatedByInput {
+  create: [BackgroundCreateWithoutUpdatedByInput!]
+  connect: [BackgroundWhereUniqueInput!]
+  disconnect: [BackgroundWhereUniqueInput!]
+  delete: [BackgroundWhereUniqueInput!]
+  update: [BackgroundUpdateWithWhereUniqueWithoutUpdatedByInput!]
+  upsert: [BackgroundUpsertWithWhereUniqueWithoutUpdatedByInput!]
 }
 
 input BackgroundUpdateOneWithoutApplicantInput {
@@ -2523,22 +2607,40 @@ input BackgroundUpdateOneWithoutApplicantInput {
 }
 
 input BackgroundUpdateWithoutApplicantDataInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
   orderedBy: UserUpdateOneWithoutBackgrounds_orderedInput
+  updatedBy: UserUpdateOneWithoutBackground_updatesInput
 }
 
 input BackgroundUpdateWithoutOrderedByDataInput {
+  updateDate: DateTime
   backgroundDate: DateTime
   type: String
   link: String
+  applicant: UserUpdateOneWithoutBackgroundInput
+  updatedBy: UserUpdateOneWithoutBackground_updatesInput
+}
+
+input BackgroundUpdateWithoutUpdatedByDataInput {
+  updateDate: DateTime
+  backgroundDate: DateTime
+  type: String
+  link: String
+  orderedBy: UserUpdateOneWithoutBackgrounds_orderedInput
   applicant: UserUpdateOneWithoutBackgroundInput
 }
 
 input BackgroundUpdateWithWhereUniqueWithoutOrderedByInput {
   where: BackgroundWhereUniqueInput!
   data: BackgroundUpdateWithoutOrderedByDataInput!
+}
+
+input BackgroundUpdateWithWhereUniqueWithoutUpdatedByInput {
+  where: BackgroundWhereUniqueInput!
+  data: BackgroundUpdateWithoutUpdatedByDataInput!
 }
 
 input BackgroundUpsertWithoutApplicantInput {
@@ -2550,6 +2652,12 @@ input BackgroundUpsertWithWhereUniqueWithoutOrderedByInput {
   where: BackgroundWhereUniqueInput!
   update: BackgroundUpdateWithoutOrderedByDataInput!
   create: BackgroundCreateWithoutOrderedByInput!
+}
+
+input BackgroundUpsertWithWhereUniqueWithoutUpdatedByInput {
+  where: BackgroundWhereUniqueInput!
+  update: BackgroundUpdateWithoutUpdatedByDataInput!
+  create: BackgroundCreateWithoutUpdatedByInput!
 }
 
 input BackgroundWhereInput {
@@ -2601,6 +2709,28 @@ input BackgroundWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  updateDate: DateTime
+
+  """All values that are not equal to given value."""
+  updateDate_not: DateTime
+
+  """All values that are contained in given list."""
+  updateDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updateDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updateDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updateDate_lte: DateTime
+
+  """All values greater than the given value."""
+  updateDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updateDate_gte: DateTime
   backgroundDate: DateTime
 
   """All values that are not equal to given value."""
@@ -2705,6 +2835,7 @@ input BackgroundWhereInput {
   link_not_ends_with: String
   orderedBy: UserWhereInput
   applicant: UserWhereInput
+  updatedBy: UserWhereInput
 }
 
 input BackgroundWhereUniqueInput {
@@ -2719,12 +2850,14 @@ type BatchPayload {
 type Client implements Node {
   id: ID!
   clientName: String!
-  addedBy(where: UserWhereInput): User
+  addedBy: User
   addedDate: DateTime
+  updatedBy: User
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
@@ -2744,19 +2877,26 @@ type ClientConnection {
 input ClientCreateInput {
   clientName: String!
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutClients_addedInput
+  updatedBy: UserCreateOneWithoutClient_updatesInput
   jobs: JobCreateManyWithoutClientInput
   personnel: UserCreateManyWithoutClientInput
 }
 
 input ClientCreateManyWithoutAddedByInput {
   create: [ClientCreateWithoutAddedByInput!]
+  connect: [ClientWhereUniqueInput!]
+}
+
+input ClientCreateManyWithoutUpdatedByInput {
+  create: [ClientCreateWithoutUpdatedByInput!]
   connect: [ClientWhereUniqueInput!]
 }
 
@@ -2773,12 +2913,14 @@ input ClientCreateOneWithoutPersonnelInput {
 input ClientCreateWithoutAddedByInput {
   clientName: String!
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
+  updatedBy: UserCreateOneWithoutClient_updatesInput
   jobs: JobCreateManyWithoutClientInput
   personnel: UserCreateManyWithoutClientInput
 }
@@ -2786,27 +2928,46 @@ input ClientCreateWithoutAddedByInput {
 input ClientCreateWithoutJobsInput {
   clientName: String!
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutClients_addedInput
+  updatedBy: UserCreateOneWithoutClient_updatesInput
   personnel: UserCreateManyWithoutClientInput
 }
 
 input ClientCreateWithoutPersonnelInput {
   clientName: String!
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
+  phone: String
+  email: String
+  addedBy: UserCreateOneWithoutClients_addedInput
+  updatedBy: UserCreateOneWithoutClient_updatesInput
+  jobs: JobCreateManyWithoutClientInput
+}
+
+input ClientCreateWithoutUpdatedByInput {
+  clientName: String!
+  addedDate: DateTime
+  updateDate: DateTime
+  address: String
+  city: String
+  state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutClients_addedInput
   jobs: JobCreateManyWithoutClientInput
+  personnel: UserCreateManyWithoutClientInput
 }
 
 """An edge in a connection."""
@@ -2825,6 +2986,8 @@ enum ClientOrderByInput {
   clientName_DESC
   addedDate_ASC
   addedDate_DESC
+  updateDate_ASC
+  updateDate_DESC
   address_ASC
   address_DESC
   city_ASC
@@ -2847,10 +3010,11 @@ type ClientPreviousValues {
   id: ID!
   clientName: String!
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
 }
@@ -2897,15 +3061,29 @@ input ClientSubscriptionWhereInput {
 input ClientUpdateInput {
   clientName: String
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   addedBy: UserUpdateOneWithoutClients_addedInput
+  updatedBy: UserUpdateOneWithoutClient_updatesInput
   jobs: JobUpdateManyWithoutClientInput
   personnel: UserUpdateManyWithoutClientInput
+}
+
+input ClientUpdateManyMutationInput {
+  clientName: String
+  addedDate: DateTime
+  updateDate: DateTime
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  email: String
 }
 
 input ClientUpdateManyWithoutAddedByInput {
@@ -2915,6 +3093,15 @@ input ClientUpdateManyWithoutAddedByInput {
   delete: [ClientWhereUniqueInput!]
   update: [ClientUpdateWithWhereUniqueWithoutAddedByInput!]
   upsert: [ClientUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input ClientUpdateManyWithoutUpdatedByInput {
+  create: [ClientCreateWithoutUpdatedByInput!]
+  connect: [ClientWhereUniqueInput!]
+  disconnect: [ClientWhereUniqueInput!]
+  delete: [ClientWhereUniqueInput!]
+  update: [ClientUpdateWithWhereUniqueWithoutUpdatedByInput!]
+  upsert: [ClientUpsertWithWhereUniqueWithoutUpdatedByInput!]
 }
 
 input ClientUpdateOneWithoutJobsInput {
@@ -2938,12 +3125,14 @@ input ClientUpdateOneWithoutPersonnelInput {
 input ClientUpdateWithoutAddedByDataInput {
   clientName: String
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
+  updatedBy: UserUpdateOneWithoutClient_updatesInput
   jobs: JobUpdateManyWithoutClientInput
   personnel: UserUpdateManyWithoutClientInput
 }
@@ -2951,32 +3140,56 @@ input ClientUpdateWithoutAddedByDataInput {
 input ClientUpdateWithoutJobsDataInput {
   clientName: String
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   email: String
   addedBy: UserUpdateOneWithoutClients_addedInput
+  updatedBy: UserUpdateOneWithoutClient_updatesInput
   personnel: UserUpdateManyWithoutClientInput
 }
 
 input ClientUpdateWithoutPersonnelDataInput {
   clientName: String
   addedDate: DateTime
+  updateDate: DateTime
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
+  phone: String
+  email: String
+  addedBy: UserUpdateOneWithoutClients_addedInput
+  updatedBy: UserUpdateOneWithoutClient_updatesInput
+  jobs: JobUpdateManyWithoutClientInput
+}
+
+input ClientUpdateWithoutUpdatedByDataInput {
+  clientName: String
+  addedDate: DateTime
+  updateDate: DateTime
+  address: String
+  city: String
+  state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserUpdateOneWithoutClients_addedInput
   jobs: JobUpdateManyWithoutClientInput
+  personnel: UserUpdateManyWithoutClientInput
 }
 
 input ClientUpdateWithWhereUniqueWithoutAddedByInput {
   where: ClientWhereUniqueInput!
   data: ClientUpdateWithoutAddedByDataInput!
+}
+
+input ClientUpdateWithWhereUniqueWithoutUpdatedByInput {
+  where: ClientWhereUniqueInput!
+  data: ClientUpdateWithoutUpdatedByDataInput!
 }
 
 input ClientUpsertWithoutJobsInput {
@@ -2993,6 +3206,12 @@ input ClientUpsertWithWhereUniqueWithoutAddedByInput {
   where: ClientWhereUniqueInput!
   update: ClientUpdateWithoutAddedByDataInput!
   create: ClientCreateWithoutAddedByInput!
+}
+
+input ClientUpsertWithWhereUniqueWithoutUpdatedByInput {
+  where: ClientWhereUniqueInput!
+  update: ClientUpdateWithoutUpdatedByDataInput!
+  create: ClientCreateWithoutUpdatedByInput!
 }
 
 input ClientWhereInput {
@@ -3106,6 +3325,28 @@ input ClientWhereInput {
 
   """All values greater than or equal the given value."""
   addedDate_gte: DateTime
+  updateDate: DateTime
+
+  """All values that are not equal to given value."""
+  updateDate_not: DateTime
+
+  """All values that are contained in given list."""
+  updateDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updateDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updateDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updateDate_lte: DateTime
+
+  """All values greater than the given value."""
+  updateDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updateDate_gte: DateTime
   address: String
 
   """All values that are not equal to given value."""
@@ -3226,28 +3467,46 @@ input ClientWhereInput {
 
   """All values not ending with the given string."""
   state_not_ends_with: String
-  zip: Int
+  zip: String
 
   """All values that are not equal to given value."""
-  zip_not: Int
+  zip_not: String
 
   """All values that are contained in given list."""
-  zip_in: [Int!]
+  zip_in: [String!]
 
   """All values that are not contained in given list."""
-  zip_not_in: [Int!]
+  zip_not_in: [String!]
 
   """All values less than the given value."""
-  zip_lt: Int
+  zip_lt: String
 
   """All values less than or equal the given value."""
-  zip_lte: Int
+  zip_lte: String
 
   """All values greater than the given value."""
-  zip_gt: Int
+  zip_gt: String
 
   """All values greater than or equal the given value."""
-  zip_gte: Int
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
   phone: String
 
   """All values that are not equal to given value."""
@@ -3329,6 +3588,7 @@ input ClientWhereInput {
   """All values not ending with the given string."""
   email_not_ends_with: String
   addedBy: UserWhereInput
+  updatedBy: UserWhereInput
   jobs_every: JobWhereInput
   jobs_some: JobWhereInput
   jobs_none: JobWhereInput
@@ -3345,10 +3605,10 @@ scalar DateTime
 
 type Expense implements Node {
   id: ID!
-  job(where: JobWhereInput): Job
-  consultant(where: UserWhereInput): User
+  job: Job
+  consultant: User
   expenseDate: DateTime
-  expensePaidBy(where: UserWhereInput): User
+  expensePaidBy: User
   expensePaidDate: DateTime
   type: String
   amount: Float
@@ -3506,6 +3766,14 @@ input ExpenseUpdateInput {
   job: JobUpdateOneWithoutExpensesInput
   consultant: UserUpdateOneWithoutExpenses_addedInput
   expensePaidBy: UserUpdateOneWithoutExpenses_paidInput
+}
+
+input ExpenseUpdateManyMutationInput {
+  expenseDate: DateTime
+  expensePaidDate: DateTime
+  type: String
+  amount: Float
+  link: String
 }
 
 input ExpenseUpdateManyWithoutConsultantInput {
@@ -3804,16 +4072,17 @@ input ExpenseWhereUniqueInput {
 
 type Job implements Node {
   id: ID!
-  main_contact(where: UserWhereInput): User
-  payment_contact(where: UserWhereInput): User
+  main_contact: User
+  payment_contact: User
   jobTitle: String!
-  addedBy(where: UserWhereInput): User
+  addedBy: User
   addedDate: DateTime
   location: String
   description: String
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -3824,10 +4093,10 @@ type Job implements Node {
   background_deadline: DateTime
   final_interview: DateTime
   placement_date: DateTime
-  placed(where: UserWhereInput): User
+  placed: User
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
   consultants(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  client(where: ClientWhereInput): Client
+  client: Client
   ads_placed(where: AdPlacedWhereInput, orderBy: AdPlacedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AdPlaced!]
   outreach_calls(where: OutreachCallWhereInput, orderBy: OutreachCallOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OutreachCall!]
   expenses(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
@@ -3854,6 +4123,7 @@ input JobCreateInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -3942,6 +4212,7 @@ input JobCreateWithoutAddedByInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -3974,6 +4245,7 @@ input JobCreateWithoutAds_placedInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4006,6 +4278,7 @@ input JobCreateWithoutApplicationsInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4038,6 +4311,7 @@ input JobCreateWithoutArticlesInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4070,6 +4344,7 @@ input JobCreateWithoutClientInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4102,6 +4377,7 @@ input JobCreateWithoutConsultantsInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4134,6 +4410,7 @@ input JobCreateWithoutExpensesInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4166,6 +4443,7 @@ input JobCreateWithoutOutreach_callsInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4198,6 +4476,7 @@ input JobCreateWithoutPaymentsInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4230,6 +4509,7 @@ input JobCreateWithoutTargetsInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4280,6 +4560,8 @@ enum JobOrderByInput {
   city_DESC
   state_ASC
   state_DESC
+  zip_ASC
+  zip_DESC
   created_ASC
   created_DESC
   published_ASC
@@ -4315,6 +4597,7 @@ type JobPreviousValues {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4374,6 +4657,7 @@ input JobUpdateDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4407,6 +4691,7 @@ input JobUpdateInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4430,6 +4715,27 @@ input JobUpdateInput {
   payments: PaymentUpdateManyWithoutJobInput
   targets: OutreachTargetUpdateManyWithoutJobsInput
   articles: ArticleUpdateManyWithoutJobInput
+}
+
+input JobUpdateManyMutationInput {
+  jobTitle: String
+  addedDate: DateTime
+  location: String
+  description: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  created: DateTime
+  published: Boolean
+  publishedDate: DateTime
+  brochure_sent: DateTime
+  app_deadline: DateTime
+  screening_deadline: DateTime
+  presentation: DateTime
+  background_deadline: DateTime
+  final_interview: DateTime
+  placement_date: DateTime
 }
 
 input JobUpdateManyWithoutAddedByInput {
@@ -4477,6 +4783,20 @@ input JobUpdateOneInput {
   upsert: JobUpsertNestedInput
 }
 
+input JobUpdateOneRequiredWithoutApplicationsInput {
+  create: JobCreateWithoutApplicationsInput
+  connect: JobWhereUniqueInput
+  update: JobUpdateWithoutApplicationsDataInput
+  upsert: JobUpsertWithoutApplicationsInput
+}
+
+input JobUpdateOneRequiredWithoutArticlesInput {
+  create: JobCreateWithoutArticlesInput
+  connect: JobWhereUniqueInput
+  update: JobUpdateWithoutArticlesDataInput
+  upsert: JobUpsertWithoutArticlesInput
+}
+
 input JobUpdateOneWithoutAds_placedInput {
   create: JobCreateWithoutAds_placedInput
   connect: JobWhereUniqueInput
@@ -4484,23 +4804,6 @@ input JobUpdateOneWithoutAds_placedInput {
   delete: Boolean
   update: JobUpdateWithoutAds_placedDataInput
   upsert: JobUpsertWithoutAds_placedInput
-}
-
-input JobUpdateOneWithoutApplicationsInput {
-  create: JobCreateWithoutApplicationsInput
-  connect: JobWhereUniqueInput
-  delete: Boolean
-  update: JobUpdateWithoutApplicationsDataInput
-  upsert: JobUpsertWithoutApplicationsInput
-}
-
-input JobUpdateOneWithoutArticlesInput {
-  create: JobCreateWithoutArticlesInput
-  connect: JobWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: JobUpdateWithoutArticlesDataInput
-  upsert: JobUpsertWithoutArticlesInput
 }
 
 input JobUpdateOneWithoutExpensesInput {
@@ -4538,6 +4841,7 @@ input JobUpdateWithoutAddedByDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4570,6 +4874,7 @@ input JobUpdateWithoutAds_placedDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4602,6 +4907,7 @@ input JobUpdateWithoutApplicationsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4634,6 +4940,7 @@ input JobUpdateWithoutArticlesDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4666,6 +4973,7 @@ input JobUpdateWithoutClientDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4698,6 +5006,7 @@ input JobUpdateWithoutConsultantsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4730,6 +5039,7 @@ input JobUpdateWithoutExpensesDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4762,6 +5072,7 @@ input JobUpdateWithoutOutreach_callsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4794,6 +5105,7 @@ input JobUpdateWithoutPaymentsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -4826,6 +5138,7 @@ input JobUpdateWithoutTargetsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   created: DateTime
   published: Boolean
   publishedDate: DateTime
@@ -5240,6 +5553,46 @@ input JobWhereInput {
 
   """All values not ending with the given string."""
   state_not_ends_with: String
+  zip: String
+
+  """All values that are not equal to given value."""
+  zip_not: String
+
+  """All values that are contained in given list."""
+  zip_in: [String!]
+
+  """All values that are not contained in given list."""
+  zip_not_in: [String!]
+
+  """All values less than the given value."""
+  zip_lt: String
+
+  """All values less than or equal the given value."""
+  zip_lte: String
+
+  """All values greater than the given value."""
+  zip_gt: String
+
+  """All values greater than or equal the given value."""
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
   created: DateTime
 
   """All values that are not equal to given value."""
@@ -5471,12 +5824,6 @@ input JobWhereInput {
   articles_every: ArticleWhereInput
   articles_some: ArticleWhereInput
   articles_none: ArticleWhereInput
-  _MagicalBackRelation_ReferenceByJob_every: ReferenceWhereInput
-  _MagicalBackRelation_ReferenceByJob_some: ReferenceWhereInput
-  _MagicalBackRelation_ReferenceByJob_none: ReferenceWhereInput
-  _MagicalBackRelation_ScreenCallByJob_every: ScreenCallWhereInput
-  _MagicalBackRelation_ScreenCallByJob_some: ScreenCallWhereInput
-  _MagicalBackRelation_ScreenCallByJob_none: ScreenCallWhereInput
 }
 
 input JobWhereUniqueInput {
@@ -5546,20 +5893,20 @@ type Mutation {
   upsertPayment(where: PaymentWhereUniqueInput!, create: PaymentCreateInput!, update: PaymentUpdateInput!): Payment!
   upsertJob(where: JobWhereUniqueInput!, create: JobCreateInput!, update: JobUpdateInput!): Job!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
-  updateManyAdPlaceds(data: AdPlacedUpdateInput!, where: AdPlacedWhereInput): BatchPayload!
-  updateManyAdSources(data: AdSourceUpdateInput!, where: AdSourceWhereInput): BatchPayload!
-  updateManyOutreachTargets(data: OutreachTargetUpdateInput!, where: OutreachTargetWhereInput): BatchPayload!
-  updateManyApplications(data: ApplicationUpdateInput!, where: ApplicationWhereInput): BatchPayload!
-  updateManyOutreachCalls(data: OutreachCallUpdateInput!, where: OutreachCallWhereInput): BatchPayload!
-  updateManyScreenCalls(data: ScreenCallUpdateInput!, where: ScreenCallWhereInput): BatchPayload!
-  updateManyReferences(data: ReferenceUpdateInput!, where: ReferenceWhereInput): BatchPayload!
-  updateManyBackgrounds(data: BackgroundUpdateInput!, where: BackgroundWhereInput): BatchPayload!
-  updateManyArticles(data: ArticleUpdateInput!, where: ArticleWhereInput): BatchPayload!
-  updateManyExpenses(data: ExpenseUpdateInput!, where: ExpenseWhereInput): BatchPayload!
-  updateManyPayments(data: PaymentUpdateInput!, where: PaymentWhereInput): BatchPayload!
-  updateManyJobs(data: JobUpdateInput!, where: JobWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyClients(data: ClientUpdateManyMutationInput!, where: ClientWhereInput): BatchPayload!
+  updateManyAdPlaceds(data: AdPlacedUpdateManyMutationInput!, where: AdPlacedWhereInput): BatchPayload!
+  updateManyAdSources(data: AdSourceUpdateManyMutationInput!, where: AdSourceWhereInput): BatchPayload!
+  updateManyOutreachTargets(data: OutreachTargetUpdateManyMutationInput!, where: OutreachTargetWhereInput): BatchPayload!
+  updateManyApplications(data: ApplicationUpdateManyMutationInput!, where: ApplicationWhereInput): BatchPayload!
+  updateManyOutreachCalls(data: OutreachCallUpdateManyMutationInput!, where: OutreachCallWhereInput): BatchPayload!
+  updateManyScreenCalls(data: ScreenCallUpdateManyMutationInput!, where: ScreenCallWhereInput): BatchPayload!
+  updateManyReferences(data: ReferenceUpdateManyMutationInput!, where: ReferenceWhereInput): BatchPayload!
+  updateManyBackgrounds(data: BackgroundUpdateManyMutationInput!, where: BackgroundWhereInput): BatchPayload!
+  updateManyArticles(data: ArticleUpdateManyMutationInput!, where: ArticleWhereInput): BatchPayload!
+  updateManyExpenses(data: ExpenseUpdateManyMutationInput!, where: ExpenseWhereInput): BatchPayload!
+  updateManyPayments(data: PaymentUpdateManyMutationInput!, where: PaymentWhereInput): BatchPayload!
+  updateManyJobs(data: JobUpdateManyMutationInput!, where: JobWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyAdPlaceds(where: AdPlacedWhereInput): BatchPayload!
   deleteManyAdSources(where: AdSourceWhereInput): BatchPayload!
@@ -5590,11 +5937,11 @@ interface Node {
 
 type OutreachCall implements Node {
   id: ID!
-  target(where: OutreachTargetWhereInput): OutreachTarget
-  caller(where: UserWhereInput): User
-  job(where: JobWhereInput): Job
+  target: OutreachTarget
+  caller: User
+  job: Job
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
 }
@@ -5611,7 +5958,7 @@ type OutreachCallConnection {
 
 input OutreachCallCreateInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetCreateOneWithoutCallsInput
@@ -5636,7 +5983,7 @@ input OutreachCallCreateManyWithoutTargetInput {
 
 input OutreachCallCreateWithoutCallerInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetCreateOneWithoutCallsInput
@@ -5645,7 +5992,7 @@ input OutreachCallCreateWithoutCallerInput {
 
 input OutreachCallCreateWithoutJobInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetCreateOneWithoutCallsInput
@@ -5654,7 +6001,7 @@ input OutreachCallCreateWithoutJobInput {
 
 input OutreachCallCreateWithoutTargetInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   caller: UserCreateOneWithoutOutreach_callsInput
@@ -5675,8 +6022,8 @@ enum OutreachCallOrderByInput {
   id_DESC
   lm_ASC
   lm_DESC
-  call_date_ASC
-  call_date_DESC
+  callDate_ASC
+  callDate_DESC
   notes_ASC
   notes_DESC
   referral_ASC
@@ -5690,7 +6037,7 @@ enum OutreachCallOrderByInput {
 type OutreachCallPreviousValues {
   id: ID!
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
 }
@@ -5736,12 +6083,19 @@ input OutreachCallSubscriptionWhereInput {
 
 input OutreachCallUpdateInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetUpdateOneWithoutCallsInput
   caller: UserUpdateOneWithoutOutreach_callsInput
   job: JobUpdateOneWithoutOutreach_callsInput
+}
+
+input OutreachCallUpdateManyMutationInput {
+  lm: DateTime
+  callDate: DateTime
+  notes: String
+  referral: String
 }
 
 input OutreachCallUpdateManyWithoutCallerInput {
@@ -5773,7 +6127,7 @@ input OutreachCallUpdateManyWithoutTargetInput {
 
 input OutreachCallUpdateWithoutCallerDataInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetUpdateOneWithoutCallsInput
@@ -5782,7 +6136,7 @@ input OutreachCallUpdateWithoutCallerDataInput {
 
 input OutreachCallUpdateWithoutJobDataInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   target: OutreachTargetUpdateOneWithoutCallsInput
@@ -5791,7 +6145,7 @@ input OutreachCallUpdateWithoutJobDataInput {
 
 input OutreachCallUpdateWithoutTargetDataInput {
   lm: DateTime
-  call_date: DateTime
+  callDate: DateTime
   notes: String
   referral: String
   caller: UserUpdateOneWithoutOutreach_callsInput
@@ -5902,28 +6256,28 @@ input OutreachCallWhereInput {
 
   """All values greater than or equal the given value."""
   lm_gte: DateTime
-  call_date: DateTime
+  callDate: DateTime
 
   """All values that are not equal to given value."""
-  call_date_not: DateTime
+  callDate_not: DateTime
 
   """All values that are contained in given list."""
-  call_date_in: [DateTime!]
+  callDate_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  call_date_not_in: [DateTime!]
+  callDate_not_in: [DateTime!]
 
   """All values less than the given value."""
-  call_date_lt: DateTime
+  callDate_lt: DateTime
 
   """All values less than or equal the given value."""
-  call_date_lte: DateTime
+  callDate_lte: DateTime
 
   """All values greater than the given value."""
-  call_date_gt: DateTime
+  callDate_gt: DateTime
 
   """All values greater than or equal the given value."""
-  call_date_gte: DateTime
+  callDate_gte: DateTime
   notes: String
 
   """All values that are not equal to given value."""
@@ -6015,8 +6369,8 @@ input OutreachCallWhereUniqueInput {
 
 type OutreachTarget implements Node {
   id: ID!
-  addedBy(where: UserWhereInput): User!
-  userId(where: UserWhereInput): User
+  addedBy: User!
+  userId: User
   added: DateTime
   firstName: String
   lastName: String
@@ -6025,6 +6379,7 @@ type OutreachTarget implements Node {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   calls(where: OutreachCallWhereInput, orderBy: OutreachCallOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OutreachCall!]
@@ -6050,6 +6405,7 @@ input OutreachTargetCreateInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutOutreach_targets_addedInput!
@@ -6087,6 +6443,7 @@ input OutreachTargetCreateWithoutAddedByInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   userId: UserCreateOneWithoutOutreach_targetInput
@@ -6103,6 +6460,7 @@ input OutreachTargetCreateWithoutCallsInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutOutreach_targets_addedInput!
@@ -6119,6 +6477,7 @@ input OutreachTargetCreateWithoutJobsInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutOutreach_targets_addedInput!
@@ -6135,6 +6494,7 @@ input OutreachTargetCreateWithoutUserIdInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   addedBy: UserCreateOneWithoutOutreach_targets_addedInput!
@@ -6170,6 +6530,8 @@ enum OutreachTargetOrderByInput {
   city_DESC
   state_ASC
   state_DESC
+  zip_ASC
+  zip_DESC
   phone_ASC
   phone_DESC
   email_ASC
@@ -6190,6 +6552,7 @@ type OutreachTargetPreviousValues {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
 }
@@ -6242,12 +6605,27 @@ input OutreachTargetUpdateInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
-  addedBy: UserUpdateOneWithoutOutreach_targets_addedInput
+  addedBy: UserUpdateOneRequiredWithoutOutreach_targets_addedInput
   userId: UserUpdateOneWithoutOutreach_targetInput
   calls: OutreachCallUpdateManyWithoutTargetInput
   jobs: JobUpdateManyWithoutTargetsInput
+}
+
+input OutreachTargetUpdateManyMutationInput {
+  added: DateTime
+  firstName: String
+  lastName: String
+  organization: String
+  title: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  email: String
 }
 
 input OutreachTargetUpdateManyWithoutAddedByInput {
@@ -6295,6 +6673,7 @@ input OutreachTargetUpdateWithoutAddedByDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
   userId: UserUpdateOneWithoutOutreach_targetInput
@@ -6311,9 +6690,10 @@ input OutreachTargetUpdateWithoutCallsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
-  addedBy: UserUpdateOneWithoutOutreach_targets_addedInput
+  addedBy: UserUpdateOneRequiredWithoutOutreach_targets_addedInput
   userId: UserUpdateOneWithoutOutreach_targetInput
   jobs: JobUpdateManyWithoutTargetsInput
 }
@@ -6327,9 +6707,10 @@ input OutreachTargetUpdateWithoutJobsDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
-  addedBy: UserUpdateOneWithoutOutreach_targets_addedInput
+  addedBy: UserUpdateOneRequiredWithoutOutreach_targets_addedInput
   userId: UserUpdateOneWithoutOutreach_targetInput
   calls: OutreachCallUpdateManyWithoutTargetInput
 }
@@ -6343,9 +6724,10 @@ input OutreachTargetUpdateWithoutUserIdDataInput {
   address: String
   city: String
   state: String
+  zip: String
   phone: String
   email: String
-  addedBy: UserUpdateOneWithoutOutreach_targets_addedInput
+  addedBy: UserUpdateOneRequiredWithoutOutreach_targets_addedInput
   calls: OutreachCallUpdateManyWithoutTargetInput
   jobs: JobUpdateManyWithoutTargetsInput
 }
@@ -6733,6 +7115,46 @@ input OutreachTargetWhereInput {
 
   """All values not ending with the given string."""
   state_not_ends_with: String
+  zip: String
+
+  """All values that are not equal to given value."""
+  zip_not: String
+
+  """All values that are contained in given list."""
+  zip_in: [String!]
+
+  """All values that are not contained in given list."""
+  zip_not_in: [String!]
+
+  """All values less than the given value."""
+  zip_lt: String
+
+  """All values less than or equal the given value."""
+  zip_lte: String
+
+  """All values greater than the given value."""
+  zip_gt: String
+
+  """All values greater than or equal the given value."""
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
   phone: String
 
   """All values that are not equal to given value."""
@@ -6844,11 +7266,11 @@ type PageInfo {
 
 type Payment implements Node {
   id: ID!
-  job(where: JobWhereInput): Job
-  paidBy(where: UserWhereInput): User
-  addedBy(where: UserWhereInput): User
+  job: Job
+  addedBy: User
   billDate: DateTime
-  paidDate: DateTime
+  paymentBy: User
+  paymentDate: DateTime
   phase: String
   amount: Float
 }
@@ -6865,12 +7287,12 @@ type PaymentConnection {
 
 input PaymentCreateInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobCreateOneWithoutPaymentsInput
-  paidBy: UserCreateOneWithoutPayments_paidInput
   addedBy: UserCreateOneWithoutPayments_addedInput
+  paymentBy: UserCreateOneWithoutPayments_paidInput
 }
 
 input PaymentCreateManyWithoutAddedByInput {
@@ -6883,32 +7305,32 @@ input PaymentCreateManyWithoutJobInput {
   connect: [PaymentWhereUniqueInput!]
 }
 
-input PaymentCreateManyWithoutPaidByInput {
-  create: [PaymentCreateWithoutPaidByInput!]
+input PaymentCreateManyWithoutPaymentByInput {
+  create: [PaymentCreateWithoutPaymentByInput!]
   connect: [PaymentWhereUniqueInput!]
 }
 
 input PaymentCreateWithoutAddedByInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobCreateOneWithoutPaymentsInput
-  paidBy: UserCreateOneWithoutPayments_paidInput
+  paymentBy: UserCreateOneWithoutPayments_paidInput
 }
 
 input PaymentCreateWithoutJobInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
-  paidBy: UserCreateOneWithoutPayments_paidInput
   addedBy: UserCreateOneWithoutPayments_addedInput
+  paymentBy: UserCreateOneWithoutPayments_paidInput
 }
 
-input PaymentCreateWithoutPaidByInput {
+input PaymentCreateWithoutPaymentByInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobCreateOneWithoutPaymentsInput
@@ -6929,8 +7351,8 @@ enum PaymentOrderByInput {
   id_DESC
   billDate_ASC
   billDate_DESC
-  paidDate_ASC
-  paidDate_DESC
+  paymentDate_ASC
+  paymentDate_DESC
   phase_ASC
   phase_DESC
   amount_ASC
@@ -6944,7 +7366,7 @@ enum PaymentOrderByInput {
 type PaymentPreviousValues {
   id: ID!
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
 }
@@ -6990,12 +7412,19 @@ input PaymentSubscriptionWhereInput {
 
 input PaymentUpdateInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobUpdateOneWithoutPaymentsInput
-  paidBy: UserUpdateOneWithoutPayments_paidInput
   addedBy: UserUpdateOneWithoutPayments_addedInput
+  paymentBy: UserUpdateOneWithoutPayments_paidInput
+}
+
+input PaymentUpdateManyMutationInput {
+  billDate: DateTime
+  paymentDate: DateTime
+  phase: String
+  amount: Float
 }
 
 input PaymentUpdateManyWithoutAddedByInput {
@@ -7016,36 +7445,36 @@ input PaymentUpdateManyWithoutJobInput {
   upsert: [PaymentUpsertWithWhereUniqueWithoutJobInput!]
 }
 
-input PaymentUpdateManyWithoutPaidByInput {
-  create: [PaymentCreateWithoutPaidByInput!]
+input PaymentUpdateManyWithoutPaymentByInput {
+  create: [PaymentCreateWithoutPaymentByInput!]
   connect: [PaymentWhereUniqueInput!]
   disconnect: [PaymentWhereUniqueInput!]
   delete: [PaymentWhereUniqueInput!]
-  update: [PaymentUpdateWithWhereUniqueWithoutPaidByInput!]
-  upsert: [PaymentUpsertWithWhereUniqueWithoutPaidByInput!]
+  update: [PaymentUpdateWithWhereUniqueWithoutPaymentByInput!]
+  upsert: [PaymentUpsertWithWhereUniqueWithoutPaymentByInput!]
 }
 
 input PaymentUpdateWithoutAddedByDataInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobUpdateOneWithoutPaymentsInput
-  paidBy: UserUpdateOneWithoutPayments_paidInput
+  paymentBy: UserUpdateOneWithoutPayments_paidInput
 }
 
 input PaymentUpdateWithoutJobDataInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
-  paidBy: UserUpdateOneWithoutPayments_paidInput
   addedBy: UserUpdateOneWithoutPayments_addedInput
+  paymentBy: UserUpdateOneWithoutPayments_paidInput
 }
 
-input PaymentUpdateWithoutPaidByDataInput {
+input PaymentUpdateWithoutPaymentByDataInput {
   billDate: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
   phase: String
   amount: Float
   job: JobUpdateOneWithoutPaymentsInput
@@ -7062,9 +7491,9 @@ input PaymentUpdateWithWhereUniqueWithoutJobInput {
   data: PaymentUpdateWithoutJobDataInput!
 }
 
-input PaymentUpdateWithWhereUniqueWithoutPaidByInput {
+input PaymentUpdateWithWhereUniqueWithoutPaymentByInput {
   where: PaymentWhereUniqueInput!
-  data: PaymentUpdateWithoutPaidByDataInput!
+  data: PaymentUpdateWithoutPaymentByDataInput!
 }
 
 input PaymentUpsertWithWhereUniqueWithoutAddedByInput {
@@ -7079,10 +7508,10 @@ input PaymentUpsertWithWhereUniqueWithoutJobInput {
   create: PaymentCreateWithoutJobInput!
 }
 
-input PaymentUpsertWithWhereUniqueWithoutPaidByInput {
+input PaymentUpsertWithWhereUniqueWithoutPaymentByInput {
   where: PaymentWhereUniqueInput!
-  update: PaymentUpdateWithoutPaidByDataInput!
-  create: PaymentCreateWithoutPaidByInput!
+  update: PaymentUpdateWithoutPaymentByDataInput!
+  create: PaymentCreateWithoutPaymentByInput!
 }
 
 input PaymentWhereInput {
@@ -7156,28 +7585,28 @@ input PaymentWhereInput {
 
   """All values greater than or equal the given value."""
   billDate_gte: DateTime
-  paidDate: DateTime
+  paymentDate: DateTime
 
   """All values that are not equal to given value."""
-  paidDate_not: DateTime
+  paymentDate_not: DateTime
 
   """All values that are contained in given list."""
-  paidDate_in: [DateTime!]
+  paymentDate_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  paidDate_not_in: [DateTime!]
+  paymentDate_not_in: [DateTime!]
 
   """All values less than the given value."""
-  paidDate_lt: DateTime
+  paymentDate_lt: DateTime
 
   """All values less than or equal the given value."""
-  paidDate_lte: DateTime
+  paymentDate_lte: DateTime
 
   """All values greater than the given value."""
-  paidDate_gt: DateTime
+  paymentDate_gt: DateTime
 
   """All values greater than or equal the given value."""
-  paidDate_gte: DateTime
+  paymentDate_gte: DateTime
   phase: String
 
   """All values that are not equal to given value."""
@@ -7241,8 +7670,8 @@ input PaymentWhereInput {
   """All values greater than or equal the given value."""
   amount_gte: Float
   job: JobWhereInput
-  paidBy: UserWhereInput
   addedBy: UserWhereInput
+  paymentBy: UserWhereInput
 }
 
 input PaymentWhereUniqueInput {
@@ -7302,10 +7731,10 @@ type Query {
 
 type Reference implements Node {
   id: ID!
-  job(where: JobWhereInput): Job
-  applicant(where: UserWhereInput): User
-  application(where: ApplicationWhereInput): Application
-  caller(where: UserWhereInput): User
+  job: Job
+  applicant: User
+  application: Application
+  caller: User
   callDate: DateTime
   notes: String
   lm: DateTime
@@ -7514,6 +7943,19 @@ input ReferenceUpdateInput {
   applicant: UserUpdateOneWithoutReferencesInput
   application: ApplicationUpdateOneWithoutReferencesInput
   caller: UserUpdateOneWithoutReference_callsInput
+}
+
+input ReferenceUpdateManyMutationInput {
+  callDate: DateTime
+  notes: String
+  lm: DateTime
+  firstName: String
+  lastName: String
+  title: String
+  organization: String
+  relation: String
+  email: String
+  phone: String
 }
 
 input ReferenceUpdateManyWithoutApplicantInput {
@@ -8049,10 +8491,10 @@ input ReferenceWhereUniqueInput {
 
 type ScreenCall implements Node {
   id: ID!
-  job(where: JobWhereInput): Job
-  applicant(where: UserWhereInput): User
-  application(where: ApplicationWhereInput): Application
-  caller(where: UserWhereInput): User
+  job: Job
+  applicant: User
+  application: Application
+  caller: User
   lm: DateTime
   callDate: DateTime
   notes: String
@@ -8198,6 +8640,12 @@ input ScreenCallUpdateInput {
   applicant: UserUpdateOneWithoutApplicant_screen_callsInput
   application: ApplicationUpdateOneWithoutScreen_callInput
   caller: UserUpdateOneWithoutConsultant_screen_callsInput
+}
+
+input ScreenCallUpdateManyMutationInput {
+  lm: DateTime
+  callDate: DateTime
+  notes: String
 }
 
 input ScreenCallUpdateManyWithoutApplicantInput {
@@ -8450,21 +8898,21 @@ type User implements Node {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
   type: UserType
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
   consultant_jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
-  client(where: ClientWhereInput): Client
+  client: Client
   clients_added(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client!]
   jobs_added(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
   references(where: ReferenceWhereInput, orderBy: ReferenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reference!]
   applicant_screen_calls(where: ScreenCallWhereInput, orderBy: ScreenCallOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ScreenCall!]
-  background(where: BackgroundWhereInput): Background
+  background: Background
   articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
-  outreach_target(where: OutreachTargetWhereInput): OutreachTarget
+  outreach_target: OutreachTarget
   ad_sources_added(where: AdSourceWhereInput, orderBy: AdSourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AdSource!]
   ads_placed(where: AdPlacedWhereInput, orderBy: AdPlacedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AdPlaced!]
   outreach_targets_added(where: OutreachTargetWhereInput, orderBy: OutreachTargetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OutreachTarget!]
@@ -8477,6 +8925,8 @@ type User implements Node {
   expenses_paid(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
   payments_added(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
   payments_paid(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment!]
+  client_updates(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client!]
+  background_updates(where: BackgroundWhereInput, orderBy: BackgroundOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Background!]
 }
 
 """A connection to a list of items."""
@@ -8497,7 +8947,7 @@ input UserCreateInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8523,7 +8973,9 @@ input UserCreateInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateManyWithoutClientInput {
@@ -8571,6 +9023,11 @@ input UserCreateOneWithoutArticlesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutBackground_updatesInput {
+  create: UserCreateWithoutBackground_updatesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutBackgroundInput {
   create: UserCreateWithoutBackgroundInput
   connect: UserWhereUniqueInput
@@ -8578,6 +9035,11 @@ input UserCreateOneWithoutBackgroundInput {
 
 input UserCreateOneWithoutBackgrounds_orderedInput {
   create: UserCreateWithoutBackgrounds_orderedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutClient_updatesInput {
+  create: UserCreateWithoutClient_updatesInput
   connect: UserWhereUniqueInput
 }
 
@@ -8649,7 +9111,7 @@ input UserCreateWithoutAd_sources_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8674,7 +9136,9 @@ input UserCreateWithoutAd_sources_addedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutAds_placedInput {
@@ -8685,7 +9149,7 @@ input UserCreateWithoutAds_placedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8710,7 +9174,9 @@ input UserCreateWithoutAds_placedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutApplicant_screen_callsInput {
@@ -8721,7 +9187,7 @@ input UserCreateWithoutApplicant_screen_callsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8746,7 +9212,9 @@ input UserCreateWithoutApplicant_screen_callsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutApplicationsInput {
@@ -8757,7 +9225,7 @@ input UserCreateWithoutApplicationsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8782,7 +9250,9 @@ input UserCreateWithoutApplicationsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutArticles_addedInput {
@@ -8793,7 +9263,7 @@ input UserCreateWithoutArticles_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8818,7 +9288,9 @@ input UserCreateWithoutArticles_addedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutArticlesInput {
@@ -8829,7 +9301,7 @@ input UserCreateWithoutArticlesInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8854,7 +9326,47 @@ input UserCreateWithoutArticlesInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
+}
+
+input UserCreateWithoutBackground_updatesInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationCreateManyWithoutApplicationInput
+  consultant_jobs: JobCreateManyWithoutConsultantsInput
+  client: ClientCreateOneWithoutPersonnelInput
+  clients_added: ClientCreateManyWithoutAddedByInput
+  jobs_added: JobCreateManyWithoutAddedByInput
+  references: ReferenceCreateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
+  background: BackgroundCreateOneWithoutApplicantInput
+  articles: ArticleCreateManyWithoutApplicantInput
+  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
+  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
+  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
+  outreach_calls: OutreachCallCreateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
+  reference_calls: ReferenceCreateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
+  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutBackgroundInput {
@@ -8865,7 +9377,7 @@ input UserCreateWithoutBackgroundInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8890,7 +9402,9 @@ input UserCreateWithoutBackgroundInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutBackgrounds_orderedInput {
@@ -8901,7 +9415,7 @@ input UserCreateWithoutBackgrounds_orderedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8926,7 +9440,47 @@ input UserCreateWithoutBackgrounds_orderedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
+}
+
+input UserCreateWithoutClient_updatesInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationCreateManyWithoutApplicationInput
+  consultant_jobs: JobCreateManyWithoutConsultantsInput
+  client: ClientCreateOneWithoutPersonnelInput
+  clients_added: ClientCreateManyWithoutAddedByInput
+  jobs_added: JobCreateManyWithoutAddedByInput
+  references: ReferenceCreateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallCreateManyWithoutApplicantInput
+  background: BackgroundCreateOneWithoutApplicantInput
+  articles: ArticleCreateManyWithoutApplicantInput
+  outreach_target: OutreachTargetCreateOneWithoutUserIdInput
+  ad_sources_added: AdSourceCreateManyWithoutAddedByInput
+  ads_placed: AdPlacedCreateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetCreateManyWithoutAddedByInput
+  outreach_calls: OutreachCallCreateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallCreateManyWithoutCallerInput
+  reference_calls: ReferenceCreateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundCreateManyWithoutOrderedByInput
+  articles_added: ArticleCreateManyWithoutAddedByInput
+  expenses_added: ExpenseCreateManyWithoutConsultantInput
+  expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
+  payments_added: PaymentCreateManyWithoutAddedByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutClientInput {
@@ -8937,7 +9491,7 @@ input UserCreateWithoutClientInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8962,7 +9516,9 @@ input UserCreateWithoutClientInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutClients_addedInput {
@@ -8973,7 +9529,7 @@ input UserCreateWithoutClients_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -8998,7 +9554,9 @@ input UserCreateWithoutClients_addedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutConsultant_jobsInput {
@@ -9009,7 +9567,7 @@ input UserCreateWithoutConsultant_jobsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9034,7 +9592,9 @@ input UserCreateWithoutConsultant_jobsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutConsultant_screen_callsInput {
@@ -9045,7 +9605,7 @@ input UserCreateWithoutConsultant_screen_callsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9070,7 +9630,9 @@ input UserCreateWithoutConsultant_screen_callsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutExpenses_addedInput {
@@ -9081,7 +9643,7 @@ input UserCreateWithoutExpenses_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9106,7 +9668,9 @@ input UserCreateWithoutExpenses_addedInput {
   articles_added: ArticleCreateManyWithoutAddedByInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutExpenses_paidInput {
@@ -9117,7 +9681,7 @@ input UserCreateWithoutExpenses_paidInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9142,7 +9706,9 @@ input UserCreateWithoutExpenses_paidInput {
   articles_added: ArticleCreateManyWithoutAddedByInput
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutJobs_addedInput {
@@ -9153,7 +9719,7 @@ input UserCreateWithoutJobs_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9178,7 +9744,9 @@ input UserCreateWithoutJobs_addedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutOutreach_callsInput {
@@ -9189,7 +9757,7 @@ input UserCreateWithoutOutreach_callsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9214,7 +9782,9 @@ input UserCreateWithoutOutreach_callsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutOutreach_targetInput {
@@ -9225,7 +9795,7 @@ input UserCreateWithoutOutreach_targetInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9250,7 +9820,9 @@ input UserCreateWithoutOutreach_targetInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutOutreach_targets_addedInput {
@@ -9261,7 +9833,7 @@ input UserCreateWithoutOutreach_targets_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9286,7 +9858,9 @@ input UserCreateWithoutOutreach_targets_addedInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutPayments_addedInput {
@@ -9297,7 +9871,7 @@ input UserCreateWithoutPayments_addedInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9322,7 +9896,9 @@ input UserCreateWithoutPayments_addedInput {
   articles_added: ArticleCreateManyWithoutAddedByInput
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutPayments_paidInput {
@@ -9333,7 +9909,7 @@ input UserCreateWithoutPayments_paidInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9359,6 +9935,8 @@ input UserCreateWithoutPayments_paidInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutReference_callsInput {
@@ -9369,7 +9947,7 @@ input UserCreateWithoutReference_callsInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9394,7 +9972,9 @@ input UserCreateWithoutReference_callsInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 input UserCreateWithoutReferencesInput {
@@ -9405,7 +9985,7 @@ input UserCreateWithoutReferencesInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9430,7 +10010,9 @@ input UserCreateWithoutReferencesInput {
   expenses_added: ExpenseCreateManyWithoutConsultantInput
   expenses_paid: ExpenseCreateManyWithoutExpensePaidByInput
   payments_added: PaymentCreateManyWithoutAddedByInput
-  payments_paid: PaymentCreateManyWithoutPaidByInput
+  payments_paid: PaymentCreateManyWithoutPaymentByInput
+  client_updates: ClientCreateManyWithoutUpdatedByInput
+  background_updates: BackgroundCreateManyWithoutUpdatedByInput
 }
 
 """An edge in a connection."""
@@ -9484,7 +10066,7 @@ type UserPreviousValues {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9547,7 +10129,7 @@ input UserUpdateDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9573,7 +10155,9 @@ input UserUpdateDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateInput {
@@ -9584,7 +10168,7 @@ input UserUpdateInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9610,7 +10194,24 @@ input UserUpdateInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
+}
+
+input UserUpdateManyMutationInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
 }
 
 input UserUpdateManyWithoutClientInput {
@@ -9640,12 +10241,39 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
 }
 
-input UserUpdateOneWithoutAd_sources_addedInput {
+input UserUpdateOneRequiredWithoutAd_sources_addedInput {
   create: UserCreateWithoutAd_sources_addedInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutAd_sources_addedDataInput
   upsert: UserUpsertWithoutAd_sources_addedInput
+}
+
+input UserUpdateOneRequiredWithoutApplicationsInput {
+  create: UserCreateWithoutApplicationsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutApplicationsDataInput
+  upsert: UserUpsertWithoutApplicationsInput
+}
+
+input UserUpdateOneRequiredWithoutArticles_addedInput {
+  create: UserCreateWithoutArticles_addedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutArticles_addedDataInput
+  upsert: UserUpsertWithoutArticles_addedInput
+}
+
+input UserUpdateOneRequiredWithoutArticlesInput {
+  create: UserCreateWithoutArticlesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutArticlesDataInput
+  upsert: UserUpsertWithoutArticlesInput
+}
+
+input UserUpdateOneRequiredWithoutOutreach_targets_addedInput {
+  create: UserCreateWithoutOutreach_targets_addedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutOutreach_targets_addedDataInput
+  upsert: UserUpsertWithoutOutreach_targets_addedInput
 }
 
 input UserUpdateOneWithoutAds_placedInput {
@@ -9666,30 +10294,13 @@ input UserUpdateOneWithoutApplicant_screen_callsInput {
   upsert: UserUpsertWithoutApplicant_screen_callsInput
 }
 
-input UserUpdateOneWithoutApplicationsInput {
-  create: UserCreateWithoutApplicationsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutApplicationsDataInput
-  upsert: UserUpsertWithoutApplicationsInput
-}
-
-input UserUpdateOneWithoutArticles_addedInput {
-  create: UserCreateWithoutArticles_addedInput
+input UserUpdateOneWithoutBackground_updatesInput {
+  create: UserCreateWithoutBackground_updatesInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: UserUpdateWithoutArticles_addedDataInput
-  upsert: UserUpsertWithoutArticles_addedInput
-}
-
-input UserUpdateOneWithoutArticlesInput {
-  create: UserCreateWithoutArticlesInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: UserUpdateWithoutArticlesDataInput
-  upsert: UserUpsertWithoutArticlesInput
+  update: UserUpdateWithoutBackground_updatesDataInput
+  upsert: UserUpsertWithoutBackground_updatesInput
 }
 
 input UserUpdateOneWithoutBackgroundInput {
@@ -9708,6 +10319,15 @@ input UserUpdateOneWithoutBackgrounds_orderedInput {
   delete: Boolean
   update: UserUpdateWithoutBackgrounds_orderedDataInput
   upsert: UserUpsertWithoutBackgrounds_orderedInput
+}
+
+input UserUpdateOneWithoutClient_updatesInput {
+  create: UserCreateWithoutClient_updatesInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutClient_updatesDataInput
+  upsert: UserUpsertWithoutClient_updatesInput
 }
 
 input UserUpdateOneWithoutClients_addedInput {
@@ -9773,14 +10393,6 @@ input UserUpdateOneWithoutOutreach_targetInput {
   upsert: UserUpsertWithoutOutreach_targetInput
 }
 
-input UserUpdateOneWithoutOutreach_targets_addedInput {
-  create: UserCreateWithoutOutreach_targets_addedInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
-  update: UserUpdateWithoutOutreach_targets_addedDataInput
-  upsert: UserUpsertWithoutOutreach_targets_addedInput
-}
-
 input UserUpdateOneWithoutPayments_addedInput {
   create: UserCreateWithoutPayments_addedInput
   connect: UserWhereUniqueInput
@@ -9825,7 +10437,7 @@ input UserUpdateWithoutAd_sources_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9850,7 +10462,9 @@ input UserUpdateWithoutAd_sources_addedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutAds_placedDataInput {
@@ -9861,7 +10475,7 @@ input UserUpdateWithoutAds_placedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9886,7 +10500,9 @@ input UserUpdateWithoutAds_placedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutApplicant_screen_callsDataInput {
@@ -9897,7 +10513,7 @@ input UserUpdateWithoutApplicant_screen_callsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9922,7 +10538,9 @@ input UserUpdateWithoutApplicant_screen_callsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutApplicationsDataInput {
@@ -9933,7 +10551,7 @@ input UserUpdateWithoutApplicationsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9958,7 +10576,9 @@ input UserUpdateWithoutApplicationsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutArticles_addedDataInput {
@@ -9969,7 +10589,7 @@ input UserUpdateWithoutArticles_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -9994,7 +10614,9 @@ input UserUpdateWithoutArticles_addedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutArticlesDataInput {
@@ -10005,7 +10627,7 @@ input UserUpdateWithoutArticlesDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10030,7 +10652,47 @@ input UserUpdateWithoutArticlesDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
+}
+
+input UserUpdateWithoutBackground_updatesDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationUpdateManyWithoutApplicationInput
+  consultant_jobs: JobUpdateManyWithoutConsultantsInput
+  client: ClientUpdateOneWithoutPersonnelInput
+  clients_added: ClientUpdateManyWithoutAddedByInput
+  jobs_added: JobUpdateManyWithoutAddedByInput
+  references: ReferenceUpdateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
+  background: BackgroundUpdateOneWithoutApplicantInput
+  articles: ArticleUpdateManyWithoutApplicantInput
+  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
+  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
+  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
+  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
+  reference_calls: ReferenceUpdateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
+  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutBackgroundDataInput {
@@ -10041,7 +10703,7 @@ input UserUpdateWithoutBackgroundDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10066,7 +10728,9 @@ input UserUpdateWithoutBackgroundDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutBackgrounds_orderedDataInput {
@@ -10077,7 +10741,7 @@ input UserUpdateWithoutBackgrounds_orderedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10102,7 +10766,47 @@ input UserUpdateWithoutBackgrounds_orderedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
+}
+
+input UserUpdateWithoutClient_updatesDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  state: String
+  zip: String
+  phone: String
+  last_login: DateTime
+  online: Boolean
+  type: UserType
+  applications: ApplicationUpdateManyWithoutApplicationInput
+  consultant_jobs: JobUpdateManyWithoutConsultantsInput
+  client: ClientUpdateOneWithoutPersonnelInput
+  clients_added: ClientUpdateManyWithoutAddedByInput
+  jobs_added: JobUpdateManyWithoutAddedByInput
+  references: ReferenceUpdateManyWithoutApplicantInput
+  applicant_screen_calls: ScreenCallUpdateManyWithoutApplicantInput
+  background: BackgroundUpdateOneWithoutApplicantInput
+  articles: ArticleUpdateManyWithoutApplicantInput
+  outreach_target: OutreachTargetUpdateOneWithoutUserIdInput
+  ad_sources_added: AdSourceUpdateManyWithoutAddedByInput
+  ads_placed: AdPlacedUpdateManyWithoutPlacedByInput
+  outreach_targets_added: OutreachTargetUpdateManyWithoutAddedByInput
+  outreach_calls: OutreachCallUpdateManyWithoutCallerInput
+  consultant_screen_calls: ScreenCallUpdateManyWithoutCallerInput
+  reference_calls: ReferenceUpdateManyWithoutCallerInput
+  backgrounds_ordered: BackgroundUpdateManyWithoutOrderedByInput
+  articles_added: ArticleUpdateManyWithoutAddedByInput
+  expenses_added: ExpenseUpdateManyWithoutConsultantInput
+  expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
+  payments_added: PaymentUpdateManyWithoutAddedByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutClientDataInput {
@@ -10113,7 +10817,7 @@ input UserUpdateWithoutClientDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10138,7 +10842,9 @@ input UserUpdateWithoutClientDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutClients_addedDataInput {
@@ -10149,7 +10855,7 @@ input UserUpdateWithoutClients_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10174,7 +10880,9 @@ input UserUpdateWithoutClients_addedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutConsultant_jobsDataInput {
@@ -10185,7 +10893,7 @@ input UserUpdateWithoutConsultant_jobsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10210,7 +10918,9 @@ input UserUpdateWithoutConsultant_jobsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutConsultant_screen_callsDataInput {
@@ -10221,7 +10931,7 @@ input UserUpdateWithoutConsultant_screen_callsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10246,7 +10956,9 @@ input UserUpdateWithoutConsultant_screen_callsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutExpenses_addedDataInput {
@@ -10257,7 +10969,7 @@ input UserUpdateWithoutExpenses_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10282,7 +10994,9 @@ input UserUpdateWithoutExpenses_addedDataInput {
   articles_added: ArticleUpdateManyWithoutAddedByInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutExpenses_paidDataInput {
@@ -10293,7 +11007,7 @@ input UserUpdateWithoutExpenses_paidDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10318,7 +11032,9 @@ input UserUpdateWithoutExpenses_paidDataInput {
   articles_added: ArticleUpdateManyWithoutAddedByInput
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutJobs_addedDataInput {
@@ -10329,7 +11045,7 @@ input UserUpdateWithoutJobs_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10354,7 +11070,9 @@ input UserUpdateWithoutJobs_addedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutOutreach_callsDataInput {
@@ -10365,7 +11083,7 @@ input UserUpdateWithoutOutreach_callsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10390,7 +11108,9 @@ input UserUpdateWithoutOutreach_callsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutOutreach_targetDataInput {
@@ -10401,7 +11121,7 @@ input UserUpdateWithoutOutreach_targetDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10426,7 +11146,9 @@ input UserUpdateWithoutOutreach_targetDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutOutreach_targets_addedDataInput {
@@ -10437,7 +11159,7 @@ input UserUpdateWithoutOutreach_targets_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10462,7 +11184,9 @@ input UserUpdateWithoutOutreach_targets_addedDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutPayments_addedDataInput {
@@ -10473,7 +11197,7 @@ input UserUpdateWithoutPayments_addedDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10498,7 +11222,9 @@ input UserUpdateWithoutPayments_addedDataInput {
   articles_added: ArticleUpdateManyWithoutAddedByInput
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutPayments_paidDataInput {
@@ -10509,7 +11235,7 @@ input UserUpdateWithoutPayments_paidDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10535,6 +11261,8 @@ input UserUpdateWithoutPayments_paidDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutReference_callsDataInput {
@@ -10545,7 +11273,7 @@ input UserUpdateWithoutReference_callsDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10570,7 +11298,9 @@ input UserUpdateWithoutReference_callsDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithoutReferencesDataInput {
@@ -10581,7 +11311,7 @@ input UserUpdateWithoutReferencesDataInput {
   address: String
   city: String
   state: String
-  zip: Int
+  zip: String
   phone: String
   last_login: DateTime
   online: Boolean
@@ -10606,7 +11336,9 @@ input UserUpdateWithoutReferencesDataInput {
   expenses_added: ExpenseUpdateManyWithoutConsultantInput
   expenses_paid: ExpenseUpdateManyWithoutExpensePaidByInput
   payments_added: PaymentUpdateManyWithoutAddedByInput
-  payments_paid: PaymentUpdateManyWithoutPaidByInput
+  payments_paid: PaymentUpdateManyWithoutPaymentByInput
+  client_updates: ClientUpdateManyWithoutUpdatedByInput
+  background_updates: BackgroundUpdateManyWithoutUpdatedByInput
 }
 
 input UserUpdateWithWhereUniqueWithoutClientInput {
@@ -10654,6 +11386,11 @@ input UserUpsertWithoutArticlesInput {
   create: UserCreateWithoutArticlesInput!
 }
 
+input UserUpsertWithoutBackground_updatesInput {
+  update: UserUpdateWithoutBackground_updatesDataInput!
+  create: UserCreateWithoutBackground_updatesInput!
+}
+
 input UserUpsertWithoutBackgroundInput {
   update: UserUpdateWithoutBackgroundDataInput!
   create: UserCreateWithoutBackgroundInput!
@@ -10662,6 +11399,11 @@ input UserUpsertWithoutBackgroundInput {
 input UserUpsertWithoutBackgrounds_orderedInput {
   update: UserUpdateWithoutBackgrounds_orderedDataInput!
   create: UserCreateWithoutBackgrounds_orderedInput!
+}
+
+input UserUpsertWithoutClient_updatesInput {
+  update: UserUpdateWithoutClient_updatesDataInput!
+  create: UserCreateWithoutClient_updatesInput!
 }
 
 input UserUpsertWithoutClients_addedInput {
@@ -11065,28 +11807,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   state_not_ends_with: String
-  zip: Int
+  zip: String
 
   """All values that are not equal to given value."""
-  zip_not: Int
+  zip_not: String
 
   """All values that are contained in given list."""
-  zip_in: [Int!]
+  zip_in: [String!]
 
   """All values that are not contained in given list."""
-  zip_not_in: [Int!]
+  zip_not_in: [String!]
 
   """All values less than the given value."""
-  zip_lt: Int
+  zip_lt: String
 
   """All values less than or equal the given value."""
-  zip_lte: Int
+  zip_lte: String
 
   """All values greater than the given value."""
-  zip_gt: Int
+  zip_gt: String
 
   """All values greater than or equal the given value."""
-  zip_gte: Int
+  zip_gte: String
+
+  """All values containing the given string."""
+  zip_contains: String
+
+  """All values not containing the given string."""
+  zip_not_contains: String
+
+  """All values starting with the given string."""
+  zip_starts_with: String
+
+  """All values not starting with the given string."""
+  zip_not_starts_with: String
+
+  """All values ending with the given string."""
+  zip_ends_with: String
+
+  """All values not ending with the given string."""
+  zip_not_ends_with: String
   phone: String
 
   """All values that are not equal to given value."""
@@ -11223,15 +11983,12 @@ input UserWhereInput {
   payments_paid_every: PaymentWhereInput
   payments_paid_some: PaymentWhereInput
   payments_paid_none: PaymentWhereInput
-  _MagicalBackRelation_PaymentUser_every: JobWhereInput
-  _MagicalBackRelation_PaymentUser_some: JobWhereInput
-  _MagicalBackRelation_PaymentUser_none: JobWhereInput
-  _MagicalBackRelation_MainContactUser_every: JobWhereInput
-  _MagicalBackRelation_MainContactUser_some: JobWhereInput
-  _MagicalBackRelation_MainContactUser_none: JobWhereInput
-  _MagicalBackRelation_PlacedUser_every: JobWhereInput
-  _MagicalBackRelation_PlacedUser_some: JobWhereInput
-  _MagicalBackRelation_PlacedUser_none: JobWhereInput
+  client_updates_every: ClientWhereInput
+  client_updates_some: ClientWhereInput
+  client_updates_none: ClientWhereInput
+  background_updates_every: BackgroundWhereInput
+  background_updates_some: BackgroundWhereInput
+  background_updates_none: BackgroundWhereInput
 }
 
 input UserWhereUniqueInput {
